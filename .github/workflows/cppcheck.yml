@@ -19,5 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         
-      - name: cppcheck
-        uses: deep5050/cppcheck-action@master
+      - name: Install Cppcheck
+        run: sudo apt-get install cppcheck
+      
+      - name: Run Cppcheck
+        run: cppcheck .
