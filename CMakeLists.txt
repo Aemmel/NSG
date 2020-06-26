@@ -3,6 +3,9 @@ project(NSG C)
 
 set(CMAKE_C_STANDARD 11)
 
+
+add_compile_options(-Wall)
+
 # Output directory for binaries
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
