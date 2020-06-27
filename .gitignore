@@ -34,6 +34,10 @@
 # Dont save executables to .gitignore
 bin/*
 
+# Dont save output
+out/*
+!out/.keep
+
 # CMake
 CMakeLists.txt.user
 CMakeCache.txt

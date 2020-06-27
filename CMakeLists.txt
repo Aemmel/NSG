@@ -15,4 +15,4 @@ set(CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 
 
 add_executable(NSG
-        src/main.cpp)
+        src/main.cpp src/State.cpp src/State.hpp src/AbstractPrinter.hpp src/CSVPrinter.cpp src/CSVPrinter.hpp)
