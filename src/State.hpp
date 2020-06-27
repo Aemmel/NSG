@@ -14,6 +14,9 @@
  */
 class State {
 
+public:
+    enum class GRID { U, V, P };
+
 private:
     uint_fast32_t width_;
     uint_fast32_t height_;
@@ -47,6 +50,8 @@ public:
      * @param dy The distance used between two cells in y direction
      */
     State(uint_fast32_t width, uint_fast32_t height, double dx, double dy);
+
+    void fillWithFunction(GRID grid ,double (*func)(double, double));
 
     /**
      * Gets the number of cells in X direction
