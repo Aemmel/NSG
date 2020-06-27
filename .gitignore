@@ -52,6 +52,10 @@ CTestTestfile.cmake
 _deps
 cmake-build-debug
 *.cbp
+build/
 
 # CLion
 .idea/
+
+# VS Code
+.vscode/

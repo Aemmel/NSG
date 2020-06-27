@@ -1,0 +1,9 @@
+{
+    "cell_cnt_x": 10,
+    "cell_cnt_y": 10,
+    "dx": 0.1,
+    "dy": 0.1,
+    "reynold": 10,
+    "rel_epsilon": 0.01,
+    "max_time": 10.2
+}
