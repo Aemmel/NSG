@@ -12,7 +12,7 @@
 
 int main()
 {
-    //Options Op = Options("data/options.json");
+    Options Op = Options("data/options.json");
     auto state = State(100, 100, 0.1, 0.1);
 
 
