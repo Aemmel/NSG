@@ -23,7 +23,7 @@ private:
     double max_time_;
 
 public:
-    Options(std::string file_name);
+    Options(const std::string& file_name);
 
     uint_fast32_t getCellCntX();
     uint_fast32_t getCellCntY();
