@@ -8,7 +8,7 @@ using json = nlohmann::json;
 using std::cout;
 using std::endl;
 
-Options::Options(std::string file_name)
+Options::Options(const std::string& file_name)
 {
     std::ifstream json_file(file_name);
     json j;
