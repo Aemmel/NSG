@@ -1,6 +1,7 @@
 #include "json.hpp"
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 
 #include "Options.hpp"
 
@@ -11,6 +12,11 @@ using std::endl;
 Options::Options(std::string file_name)
 {
     std::ifstream json_file(file_name);
+
+    if (json_file.is_open() == false) {
+        throw std::runtime_error("Failed to open json_file");
+    }
+
     json j;
     json_file >> j;
 
