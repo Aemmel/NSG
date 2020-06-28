@@ -17,12 +17,12 @@ void CSVPrinter::print(State state, double time) {
 
     //Print v
     file.open(file_prefix_ + "v_" + std::to_string(time) + "." + extension_);
-    CSVPrinter::print_vector(file, state.u);
+    CSVPrinter::print_vector(file, state.v);
     file.close();
 
     //Print p
     file.open(file_prefix_ + "p_" + std::to_string(time) + "." + extension_);
-    CSVPrinter::print_vector(file, state.u);
+    CSVPrinter::print_vector(file, state.p);
     file.close();
 }
 
