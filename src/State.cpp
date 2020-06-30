@@ -4,6 +4,7 @@
 
 #include "State.hpp"
 #include <cmath>
+#include <iostream>
 
 using std::vector;
 
@@ -48,23 +49,24 @@ void State::fillWithFunction(State::GRID grid, double (*func)(double, double))
 {
     //vector<vector<double>> array;
 
-    auto& array = this->u;
+    auto* array = &(this->u);
 
     switch(grid) {
         case GRID::U:
-            array = this->u;
+            array = &(this->u);
             break;
         case GRID::V:
-            array = this->v;
+            array = &(this->v);
             break;
         case GRID::P:
-            array = this->p;
+            array = &(this->p);
             break;
     }
 
     for (uint_fast32_t i = 0; i < this->height_ ; i++) {
         for (uint_fast32_t j = 0; j < this->width_ ; j++) {
-            array[i][j] = func(i * this->dx_, j * this->dy_);
+            //*(array)[i][j] = func(i * this->dx_, j * this->dy_);
+            array->at(i).at(j) = func(i * this->dx_, j * this->dy_);
         }
     }
 }
