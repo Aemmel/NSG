@@ -65,7 +65,6 @@ void State::fillWithFunction(State::GRID grid, double (*func)(double, double))
 
     for (uint_fast32_t i = 0; i < this->height_ ; i++) {
         for (uint_fast32_t j = 0; j < this->width_ ; j++) {
-            //*(array)[i][j] = func(i * this->dx_, j * this->dy_);
             array->at(i).at(j) = func(i * this->dx_, j * this->dy_);
         }
     }

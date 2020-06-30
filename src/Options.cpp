@@ -32,8 +32,6 @@ Options::Options(const std::string& file_name)
 
     max_time_ = j["max_time"];
 
-    cout << reynold_ << endl;
-
     json_file.close();
 }
 

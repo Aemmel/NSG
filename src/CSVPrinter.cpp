@@ -28,13 +28,23 @@ void CSVPrinter::print(State state, double time) {
 
 void CSVPrinter::print_vector(std::ofstream& stream, std::vector<std::vector<double>>& array)
 {
+    // prevent trailing tab
+    // might not be elegant, but it works
+    uint_fast32_t row_cnt = 0;
+    char delim = '\t';
+
     //Iterate over each row
     for (const std::vector<double>& row : array) {
         //Iterate over each column
         for (double element : row) {
-            stream << element << "\t";
+            delim = (row_cnt < row.size() - 1) ? '\t' : ' '; // use tab unless we're in the last column, then use harmless space
+
+            stream << element << delim;
+
+            row_cnt++;
         }
         stream << std::endl;
+        row_cnt = 0;
     }
 }
 
