@@ -3,34 +3,24 @@
 //
 
 #include "CSVPrinter.hpp"
+#include "Common.hpp"
 
 #include <utility>
 
-
-void CSVPrinter::print(State state, double time) {
-    std::ofstream file;
-
-    //Print u
-    file.open(file_prefix_ + "u_" + std::to_string(time) + "." + extension_);
-    CSVPrinter::print_vector(file, state.u);
-    file.close();
-
-    //Print v
-    file.open(file_prefix_ + "v_" + std::to_string(time) + "." + extension_);
-    CSVPrinter::print_vector(file, state.v);
-    file.close();
-
-    //Print p
-    file.open(file_prefix_ + "p_" + std::to_string(time) + "." + extension_);
-    CSVPrinter::print_vector(file, state.p);
-    file.close();
+CSVPrinter::CSVPrinter(std::string file_prefix, std::string extension) {
+    file_prefix_ = std::move(file_prefix);
+    extension_ = std::move(extension);
 }
 
-void CSVPrinter::print_vector(std::ofstream& stream, std::vector<std::vector<double>>& array)
+void CSVPrinter::printVector(std::ofstream& stream, const matrix_t& array)
 {
+    if (stream.is_open() == false) {
+        throw std::runtime_error("Failed to open file! und Jan stinkt");
+    }
+
     // prevent trailing tab
     // might not be elegant, but it works
-    uint_fast32_t row_cnt = 0;
+    index_t row_cnt = 0;
     char delim = '\t';
 
     //Iterate over each row
@@ -48,7 +38,31 @@ void CSVPrinter::print_vector(std::ofstream& stream, std::vector<std::vector<dou
     }
 }
 
-CSVPrinter::CSVPrinter(std::string file_prefix, std::string extension) {
-    file_prefix_ = std::move(file_prefix);
-    extension_ = std::move(extension);
+void CSVPrinter::print(State state, double time) {
+    std::ofstream file;
+
+    //Print u
+    file.open(file_prefix_ + "u_" + std::to_string(time) + "." + extension_);
+    CSVPrinter::printVector(file, state.u);
+    file.close();
+
+    //Print v
+    file.open(file_prefix_ + "v_" + std::to_string(time) + "." + extension_);
+    CSVPrinter::printVector(file, state.v);
+    file.close();
+
+    //Print p
+    file.open(file_prefix_ + "p_" + std::to_string(time) + "." + extension_);
+    CSVPrinter::printVector(file, state.p);
+    file.close();
+}
+
+void CSVPrinter::printMatrix(const matrix_t& m, std::string file_name)
+{
+    std::ofstream file;
+    file.open(file_prefix_ + file_name + "." + extension_);
+
+    printVector(file, m);
+
+    file.close();
 }

@@ -17,12 +17,14 @@ private:
     std::string file_prefix_;
     std::string extension_;
 
-    static void print_vector(std::ofstream& stream, std::vector<std::vector<double>>& array);
+    static void printVector(std::ofstream& stream, const matrix_t& array);
 
 public:
     CSVPrinter(): CSVPrinter("out/nsg_", "dat") {};
     CSVPrinter(std::string file_prefix, std::string extension);
     void print(State state, double time) override;
+
+    void printMatrix(const matrix_t& m, std::string file_name);
 };
 
 

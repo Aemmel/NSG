@@ -8,7 +8,7 @@
 
 using std::vector;
 
-State::State(uint_fast32_t width, uint_fast32_t height, double dx, double dy)
+State::State(index_t width, index_t height, double dx, double dy)
 {
     width_ = width;
     height_ = height;
@@ -21,11 +21,11 @@ State::State(uint_fast32_t width, uint_fast32_t height, double dx, double dy)
     p = vector<vector<double>>(height, vector<double>(width));
 }
 
-uint_fast32_t State::getCellCountX() const {
+index_t State::getCellCountX() const {
     return width_;
 }
 
-uint_fast32_t State::getCellCountY() const {
+index_t State::getCellCountY() const {
     return height_;
 }
 
@@ -45,7 +45,7 @@ double State::getHeight() const {
     return height_;
 }
 
-void State::fillWithFunction(State::GRID grid, double (*func)(double, double))
+void State::fillWithFunction(GRID grid, std::function<double(double, double)> func)
 {
     //vector<vector<double>> array;
 
@@ -63,8 +63,8 @@ void State::fillWithFunction(State::GRID grid, double (*func)(double, double))
             break;
     }
 
-    for (uint_fast32_t i = 0; i < this->height_ ; i++) {
-        for (uint_fast32_t j = 0; j < this->width_ ; j++) {
+    for (index_t i = 0; i < this->height_ ; i++) {
+        for (index_t j = 0; j < this->width_ ; j++) {
             array->at(i).at(j) = func(i * this->dx_, j * this->dy_);
         }
     }

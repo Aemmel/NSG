@@ -4,12 +4,14 @@
 #include <string>
 #include <cinttypes>
 
+#include "Common.hpp"
+
 class Options
 {
 private:
     // grid size
-    uint_fast32_t cell_cnt_x_;
-    uint_fast32_t cell_cnt_y_;
+    index_t cell_cnt_x_;
+    index_t cell_cnt_y_;
     
     // step size
     double dx_;
@@ -25,8 +27,8 @@ private:
 public:
     Options(const std::string& file_name);
 
-    uint_fast32_t getCellCntX();
-    uint_fast32_t getCellCntY();
+    index_t getCellCntX();
+    index_t getCellCntY();
     
     double getDx();
     double getDy();

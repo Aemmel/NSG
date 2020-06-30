@@ -7,6 +7,9 @@
 
 #include <cinttypes>
 #include <vector>
+#include <functional>
+
+#include "Common.hpp"
 
 /**
  * Instances of this classes contains the current state of the system.
@@ -18,8 +21,8 @@ public:
     enum class GRID { U, V, P };
 
 private:
-    uint_fast32_t width_;
-    uint_fast32_t height_;
+    index_t width_;
+    index_t height_;
 
     double dx_;
     double dy_;
@@ -30,17 +33,17 @@ public:
     /**
      * The x component of the velocity
      */
-    std::vector<std::vector<double>> u;
+    matrix_t u;
 
     /**
      * The y component of the velocity;
      */
-    std::vector<std::vector<double>> v;
+    matrix_t v;
 
     /**
      * T
      */
-    std::vector<std::vector<double>> p;
+    matrix_t p;
 
     /**
      * Creates a new State object
@@ -49,21 +52,21 @@ public:
      * @param dx The distance between two cells in x direction
      * @param dy The distance used between two cells in y direction
      */
-    State(uint_fast32_t width, uint_fast32_t height, double dx, double dy);
+    State(index_t width, index_t height, double dx, double dy);
 
-    void fillWithFunction(GRID grid ,double (*func)(double, double));
+    void fillWithFunction(GRID grid, std::function<double(double, double)> func);
 
     /**
      * Gets the number of cells in X direction
      * @return
      */
-    uint_fast32_t getCellCountX() const;
+    index_t getCellCountX() const;
 
     /**
      * Gets the number of cells in Y direction
      * @return
      */
-    uint_fast32_t getCellCountY() const;
+    index_t getCellCountY() const;
 
     /**
      * Returns the distance between two cells in x direction

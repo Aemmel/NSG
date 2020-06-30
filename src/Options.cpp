@@ -35,12 +35,12 @@ Options::Options(const std::string& file_name)
     json_file.close();
 }
 
-uint_fast32_t Options::getCellCntX()
+index_t Options::getCellCntX()
 {
     return cell_cnt_x_;
 }
 
-uint_fast32_t Options::getCellCntY()
+index_t Options::getCellCntY()
 {
     return cell_cnt_y_;
 }

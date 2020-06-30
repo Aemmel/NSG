@@ -23,4 +23,6 @@ add_executable(NSG
         src/CSVPrinter.hpp
         src/Options.hpp
         src/Options.cpp
+        src/Stencils.hpp
+        src/Stencils.cpp
         src/json.hpp)

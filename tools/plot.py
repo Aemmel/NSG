@@ -26,6 +26,12 @@ obj = json.loads(data)
 data_u = np.array(pd.read_csv("out/nsg_u_0.000000.dat", delimiter="\t", header=None))
 data_v = np.array(pd.read_csv("out/nsg_v_0.000000.dat", delimiter="\t", header=None))
 
+data_test_func = np.transpose(np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None)))
+
+plt.plot(np.linspace(0, 10, len(data_test_func)), data_test_func)
+plt.show()
+
+exit()
 print(np.shape(data_u))
 
 x = np.linspace(0, obj["cell_cnt_x"]*obj["dx"], obj["cell_cnt_x"])
@@ -36,9 +42,9 @@ X,Y = np.meshgrid(x, y)
 fig, ax = plt.subplots()
 
 # quiver (vector-field)
-q = ax.quiver(X, Y, data_u, data_v, units="width")
+#q = ax.quiver(X, Y, data_u, data_v, units="width")
 
 # streamplot (integralcurve)
-#ax.streamplot(X, Y, data_u, data_v, density=2)
+ax.streamplot(X, Y, data_u, data_v, density=2)
 
 plt.show()
