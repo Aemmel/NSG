@@ -50,7 +50,7 @@ double State::getHeight() const {
     return height_;
 }
 
-void State::fillWithFunction(GRID grid, std::function<double(double, double)> func)
+void State::fillWithFunction(GRID grid, const std::function<double(double, double)>& func)
 {
     //vector<vector<double>> array;
 

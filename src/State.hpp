@@ -54,7 +54,7 @@ public:
      */
     State(index_t width, index_t height, double dx, double dy);
 
-    void fillWithFunction(GRID grid, std::function<double(double, double)> func);
+    void fillWithFunction(GRID grid, const std::function<double(double, double)>& func);
 
     /**
      * Gets the number of cells in X direction
