@@ -35,37 +35,37 @@ Options::Options(const std::string& file_name)
     json_file.close();
 }
 
-index_t Options::getCellCntX()
+index_t Options::getCellCntX() const
 {
     return cell_cnt_x_;
 }
 
-index_t Options::getCellCntY()
+index_t Options::getCellCntY() const
 {
     return cell_cnt_y_;
 }
     
-double Options::getDx()
+double Options::getDx() const
 {
     return dx_;
 }
 
-double Options::getDy()
+double Options::getDy() const
 {
     return dy_;
 }
 
-double Options::getReynold()
+double Options::getReynold() const
 {
     return reynold_;
 }
 
-double Options::getRelEps()
+double Options::getRelEps() const
 {
     return rel_epsilon_;
 }
 
-double Options::getMaxTime()
+double Options::getMaxTime() const
 {
     return max_time_;
 }

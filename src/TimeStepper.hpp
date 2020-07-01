@@ -8,6 +8,7 @@
 #include "Common.hpp"
 #include "Stencils.hpp"
 #include "State.hpp"
+#include "Options.hpp"
 
 class TimeStepper {
 private:
@@ -24,6 +25,8 @@ private:
 
 public:
     TimeStepper(double dx, double dy, double re, double gx, double gy);
+
+    explicit TimeStepper(const Options &options);
 
     /** Calculae the F function used to calculate the next u_ij */
     double calculateF(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;

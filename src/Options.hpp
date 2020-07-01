@@ -27,17 +27,17 @@ private:
 public:
     Options(const std::string& file_name);
 
-    index_t getCellCntX();
-    index_t getCellCntY();
+    index_t getCellCntX() const;
+    index_t getCellCntY() const;
     
-    double getDx();
-    double getDy();
+    double getDx() const;
+    double getDy() const;
 
-    double getReynold();
+    double getReynold() const;
 
-    double getRelEps();
+    double getRelEps() const;
 
-    double getMaxTime();
+    double getMaxTime() const;
 };
 
 #endif // NSG_OPTIONS_HPP

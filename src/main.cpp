@@ -9,6 +9,7 @@
 #include "CSVPrinter.hpp"
 #include "Options.hpp"
 #include "Stencils.hpp"
+#include "TimeStepper.hpp"
 
 void testStencils();
 void testStencilFG();
@@ -16,8 +17,10 @@ void testStencilFG();
 int main()
 {
     try {
-        Options Op = Options("data/options.json");
-        auto state = State(Op.getCellCntX(), Op.getCellCntY(), Op.getDx(), Op.getDy());
+        Options options = Options("data/options.json");
+        State state = State(options.getCellCntX(), options.getCellCntY(), options.getDx(), options.getDy());
+
+        TimeStepper stepper(options);
 
         //Fill with known functions
         /*state.fillWithFunction(State::GRID::U, [](double y, double x) { return cos(x) * cos(y); });

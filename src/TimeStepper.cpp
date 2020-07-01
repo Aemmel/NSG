@@ -48,3 +48,15 @@ TimeStepper::TimeStepper(double dx, double dy, double re, double gx, double gy) 
 dx_(dx), dy_(dy), Re_(re), gx_(gx), gy_(gy)
 {
 }
+
+TimeStepper::TimeStepper(const Options &options)
+{
+    dx_ = options.getDx();
+    dy_ = options.getDy();
+
+    Re_ = options.getReynold();
+
+    //TODO: Implement gravity.
+    gx_ = 0;
+    gy_ = 0;
+}
