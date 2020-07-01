@@ -68,6 +68,7 @@ void State::fillWithFunction(GRID grid, const std::function<double(double, doubl
             break;
     }
 
+    #pragma omp parallel for collapse(2)
     for (index_t i = 0; i < this->width_ ; i++) {
         for (index_t j = 0; j < this->height_ ; j++) {
             array->at(i).at(j) = func(i * this->dx_, j * this->dy_);

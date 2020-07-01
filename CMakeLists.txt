@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.9)
 project(NSG CXX)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -13,7 +13,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 
-
 add_executable(NSG
         src/main.cpp
         src/State.cpp
@@ -26,3 +25,12 @@ add_executable(NSG
         src/Stencils.hpp
         src/Stencils.cpp
         src/json.hpp src/TimeStepper.cpp src/TimeStepper.hpp)
+
+# Try to use OpenMP to use multithreading
+find_package(OpenMP)
+
+# Try to use OpenMP to use multithreading
+if(OpenMP_CXX_FOUND)
+    #Uncomment to enable OpenMP
+    #target_link_libraries(NSG PUBLIC OpenMP::OpenMP_CXX)
+endif()
