@@ -8,4 +8,6 @@ It is important that you run the compiled program from main folder (otherwise th
 Therefore: `./bin/NSG`
 
 ## Conventions
-To make indexing consistent with the math, we always index `[row][column]`
+To make indexing consistent with the instructions, we ALWAYS index `[x][y]`
+This means we first transpose the matrix, so the rows indicate our x and the columns indicate our y
+This is due to how the computer saves a 2D array as opposed to the convention first `x`, then `y`

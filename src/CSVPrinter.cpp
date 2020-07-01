@@ -19,22 +19,30 @@ void CSVPrinter::printVector(std::ofstream& stream, const matrix_t& array)
     }
 
     // prevent trailing tab
-    // might not be elegant, but it works
-    index_t row_cnt = 0;
     char delim = '\t';
 
-    //Iterate over each row
+    /*//Iterate over each row
     for (const std::vector<double>& row : array) {
         //Iterate over each column
         for (double element : row) {
             delim = (row_cnt < row.size() - 1) ? '\t' : ' '; // use tab unless we're in the last column, then use harmless space
 
             stream << element << delim;
-
-            row_cnt++;
         }
         stream << std::endl;
-        row_cnt = 0;
+    }*/
+
+
+    // remember that our array is transposed
+    // so we have to first go over the columns and then over the rows
+    // since we always have rectangular grids this should be fine. Otherwise this would break, since not every row is array[0].size() long
+    for (index_t j = 0; j < array[0].size(); j++) {
+        for (index_t i = 0; i < array.size(); i++) {
+            delim = (i < array.size() - 1) ? '\t' : ' '; // use tab unless we're in the last column, then use harmless space
+
+            stream << array[i][j] << delim;
+        }
+        stream << std::endl;
     }
 }
 

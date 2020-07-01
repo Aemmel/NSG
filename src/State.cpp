@@ -15,10 +15,15 @@ State::State(index_t width, index_t height, double dx, double dy)
     dx_ = dx;
     dy_ = dy;
 
-    //Initalize the size of the Arrays
-    u = vector<vector<double>>(height, vector<double>(width));
-    v = vector<vector<double>>(height, vector<double>(width));
-    p = vector<vector<double>>(height, vector<double>(width));
+    // Initalize the size of the Arrays
+    // keep in mind: in the instructions the convention "Culumns first, then Rows" is used, so that
+    // U_i_j is interpreted as i == x value and j == y value, unlike normal index notation
+    // or how computers usually store 2D arrays. To compensate, we simply transpose the array in this step (width_ rows and height_ columns)
+    // so that we can use the computer native notation from here on
+    // though we ALWAYS have to remember, that we have width_ rows and height_ columns!!!!!
+    u = vector<vector<double>>(width_, vector<double>(height_));
+    v = vector<vector<double>>(width_, vector<double>(height_));
+    p = vector<vector<double>>(width_, vector<double>(height_));
 }
 
 index_t State::getCellCountX() const {
@@ -63,8 +68,8 @@ void State::fillWithFunction(GRID grid, std::function<double(double, double)> fu
             break;
     }
 
-    for (index_t i = 0; i < this->height_ ; i++) {
-        for (index_t j = 0; j < this->width_ ; j++) {
+    for (index_t i = 0; i < this->width_ ; i++) {
+        for (index_t j = 0; j < this->height_ ; j++) {
             array->at(i).at(j) = func(i * this->dx_, j * this->dy_);
         }
     }

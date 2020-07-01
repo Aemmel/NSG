@@ -1,5 +1,7 @@
 #include "Stencils.hpp"
 
+#include <iostream>
+
 Stencils::Stencils(double dx, double dy, double gamma) :
 dx_(dx), dy_(dy), gamma_(gamma)
 {
@@ -16,7 +18,6 @@ double Stencils::firstDerivF(const matrix_t& f, PARAM p, index_t i, index_t j)
     index_t new_j = (p == PARAM::Y) ? j+1 : j;
     double d = (p == PARAM::X) ? dx_ : dy_;
 
-
     return (f[new_i][new_j] - f[i][j]) / d;
 }
 
@@ -30,7 +31,7 @@ double Stencils::secondDerivF(const matrix_t& f, PARAM p, index_t i, index_t j)
     index_t new_i_bward = (p == PARAM::X) ? i-1 : i; // backward
 
     index_t new_j_fward = (p == PARAM::Y) ? j+1 : j; // forward
-    index_t new_j_bward = (p == PARAM::X) ? j-1 : j; // backward
+    index_t new_j_bward = (p == PARAM::Y) ? j-1 : j; // backward
 
     double d = (p == PARAM::X) ? dx_ : dy_;
 
@@ -56,7 +57,7 @@ void Stencils::fillWithFunction(matrix_t& m, std::function<double(double, double
 {
     for (index_t i = 0; i < m.size() ; i++) {
         for (index_t j = 0; j < m[i].size() ; j++) {
-            m[i][j] = func(i * dx_, j * dy_);
+            m[i][j] = func(i * dy_, j * dx_);
         }
     }
 }

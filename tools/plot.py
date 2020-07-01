@@ -28,23 +28,23 @@ data_v = np.array(pd.read_csv("out/nsg_v_0.000000.dat", delimiter="\t", header=N
 
 data_test_func = np.transpose(np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None)))
 
-plt.plot(np.linspace(0, 10, len(data_test_func)), data_test_func)
-plt.show()
-
-exit()
-print(np.shape(data_u))
-
-x = np.linspace(0, obj["cell_cnt_x"]*obj["dx"], obj["cell_cnt_x"])
-y = np.linspace(0, obj["cell_cnt_y"]*obj["dy"], obj["cell_cnt_y"])
+x = np.linspace(0, obj["cell_cnt_x"]*obj["dx"], obj["cell_cnt_x"] - 2)
+y = np.linspace(0, obj["cell_cnt_y"]*obj["dy"], obj["cell_cnt_y"] - 2)
 X,Y = np.meshgrid(x, y)
 
+plt.plot(x, data_test_func, label="numeric")
+plt.plot(x, np.sin(x), label="orig")
+plt.plot(x, -np.sin(x), label="analytic")
 
-fig, ax = plt.subplots()
+
+#fig, ax = plt.subplots()
 
 # quiver (vector-field)
 #q = ax.quiver(X, Y, data_u, data_v, units="width")
 
 # streamplot (integralcurve)
-ax.streamplot(X, Y, data_u, data_v, density=2)
+# ax.streamplot(X, Y, data_u, data_v, density=2)
+
+plt.legend(loc="best")
 
 plt.show()
