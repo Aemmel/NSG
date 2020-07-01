@@ -32,5 +32,5 @@ find_package(OpenMP)
 # Try to use OpenMP to use multithreading
 if(OpenMP_CXX_FOUND)
     #Uncomment to enable OpenMP
-    #target_link_libraries(NSG PUBLIC OpenMP::OpenMP_CXX)
+    target_link_libraries(NSG PUBLIC OpenMP::OpenMP_CXX)
 endif()
