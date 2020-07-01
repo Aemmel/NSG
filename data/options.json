@@ -1,8 +1,8 @@
 {
-    "cell_cnt_x": 500,
-    "cell_cnt_y": 500,
-    "dx": 0.02,
-    "dy": 0.02,
+    "cell_cnt_x": 1000,
+    "cell_cnt_y": 1000,
+    "dx": 0.01,
+    "dy": 0.01,
     "reynold": 10,
     "rel_epsilon": 0.01,
     "max_time": 10.2

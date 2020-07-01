@@ -26,15 +26,19 @@ obj = json.loads(data)
 data_u = np.array(pd.read_csv("out/nsg_u_0.000000.dat", delimiter="\t", header=None))
 data_v = np.array(pd.read_csv("out/nsg_v_0.000000.dat", delimiter="\t", header=None))
 
-data_test_func = np.transpose(np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None)))
+#data_test_func = np.transpose(np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None)))
+data_test_func = np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None))
 
 x = np.linspace(0, obj["cell_cnt_x"]*obj["dx"], obj["cell_cnt_x"] - 2)
 y = np.linspace(0, obj["cell_cnt_y"]*obj["dy"], obj["cell_cnt_y"] - 2)
 X,Y = np.meshgrid(x, y)
 
-plt.plot(x, data_test_func, label="numeric")
-plt.plot(x, np.sin(x), label="orig")
-plt.plot(x, -np.sin(x), label="analytic")
+#x_data = x
+x_data = y
+
+plt.plot(x_data, data_test_func, label="numeric")
+plt.plot(x_data, np.sin(x_data)*np.cos(x_data), label="orig")
+plt.plot(x_data, np.cos(x_data)**2 - np.sin(x_data)**2, label="analytic")
 
 
 #fig, ax = plt.subplots()
