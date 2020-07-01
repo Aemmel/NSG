@@ -25,4 +25,4 @@ add_executable(NSG
         src/Options.cpp
         src/Stencils.hpp
         src/Stencils.cpp
-        src/json.hpp)
+        src/json.hpp src/TimeStepper.cpp src/TimeStepper.hpp)

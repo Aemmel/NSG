@@ -19,7 +19,7 @@ void Stencils::setNewGamma(double gamma)
  * 
  * [df/dy]_i_j = [ f_i_(j+1) - f_i_j ] / dy
  */
-double Stencils::firstDerivF(const matrix_t &f, PARAM p, index_t i, index_t j)
+double Stencils::firstDerivF(const matrix_t &f, PARAM p, index_t i, index_t j) const
 {
     index_t new_i = (p == PARAM::X) ? i+1 : i;
     index_t new_j = (p == PARAM::Y) ? j+1 : j;
@@ -33,7 +33,7 @@ double Stencils::firstDerivF(const matrix_t &f, PARAM p, index_t i, index_t j)
  * 
  * [d^2f/dy^2]_i_j = [ f_i_(j+1) - 2*f_i_j + f_i_(j-1) ] / (dy)^2
  */ 
-double Stencils::secondDerivF(const matrix_t &f, PARAM p, index_t i, index_t j)
+double Stencils::secondDerivF(const matrix_t &f, PARAM p, index_t i, index_t j) const
 {
     index_t new_i_fward = (p == PARAM::X) ? i+1 : i; // forward
     index_t new_i_bward = (p == PARAM::X) ? i-1 : i; // backward
@@ -60,7 +60,7 @@ double Stencils::secondDerivF(const matrix_t &f, PARAM p, index_t i, index_t j)
  *                  + gamma [ |f_i_j + f_i_(j+1)|/2 * (f_i_j - f_i_(j+1))/2
  *                  - |f_i_(j-1) + f_i_j|/2 * (f_i_(j-1) - f_i_j)/2 ] / dy
  */ 
-double Stencils::firstDerivFSquared(const matrix_t &f, PARAM p, index_t i, index_t j)
+double Stencils::firstDerivFSquared(const matrix_t &f, PARAM p, index_t i, index_t j) const
 {
     index_t new_i_fward = (p == PARAM::X) ? i+1 : i; // forward
     index_t new_i_bward = (p == PARAM::X) ? i-1 : i; // backward
@@ -92,7 +92,7 @@ double Stencils::firstDerivFSquared(const matrix_t &f, PARAM p, index_t i, index
  *                  + gamma * [ |g_i_j + g_(i+1)_j|/2 * (f_i_j - f_i_(j+1))/2
  *                  - |g_i_(j-1) + g_(i+1)_(j-1)|/2 * (f_i_(j-1) - f_i_j)/2 ] / dy
  */ 
-double Stencils::firstDerivFG(const matrix_t &f, const matrix_t &g, PARAM p, index_t i, index_t j)
+double Stencils::firstDerivFG(const matrix_t &f, const matrix_t &g, PARAM p, index_t i, index_t j) const
 {
     // conditional parameter
     // so we can easily add or substract 1 or 0, depending on if we derive after x or y

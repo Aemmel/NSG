@@ -20,10 +20,10 @@ public:
     
     void setNewGamma(double gamma);
 
-    double firstDerivF(const matrix_t &f, PARAM p, index_t i, index_t j);
-    double secondDerivF(const matrix_t &f, PARAM p, index_t i, index_t j);
-    double firstDerivFSquared(const matrix_t &f, PARAM p, index_t i, index_t j);
-    double firstDerivFG(const matrix_t &f, const matrix_t &g, PARAM p, index_t i, index_t j);
+    double firstDerivF(const matrix_t &f, PARAM p, index_t i, index_t j) const;
+    double secondDerivF(const matrix_t &f, PARAM p, index_t i, index_t j) const;
+    double firstDerivFSquared(const matrix_t &f, PARAM p, index_t i, index_t j) const;
+    double firstDerivFG(const matrix_t &f, const matrix_t &g, PARAM p, index_t i, index_t j) const;
 };
 
 #endif // NSG_STENICLS_HEADER
