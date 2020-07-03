@@ -8,12 +8,13 @@
 
 using std::vector;
 
-State::State(index_t width, index_t height, double dx, double dy)
+State::State(index_t width, index_t height, double dx, double dy, double t)
 {
     width_ = width;
     height_ = height;
     dx_ = dx;
     dy_ = dy;
+    t_ = t;
 
     // Initalize the size of the Arrays
     // keep in mind: in the instructions the convention "Culumns first, then Rows" is used, so that

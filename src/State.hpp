@@ -27,6 +27,8 @@ private:
     double dx_;
     double dy_;
 
+    double t_;
+
 public:
 
 
@@ -41,7 +43,7 @@ public:
     matrix_t v;
 
     /**
-     * T
+     * The pressure field
      */
     matrix_t p;
 
@@ -52,7 +54,7 @@ public:
      * @param dx The distance between two cells in x direction
      * @param dy The distance used between two cells in y direction
      */
-    State(index_t width, index_t height, double dx, double dy);
+    State(index_t width, index_t height, double dx, double dy, double t);
 
     void fillWithFunction(GRID grid, const std::function<double(double, double)>& func);
 

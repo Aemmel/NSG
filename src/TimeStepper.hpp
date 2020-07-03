@@ -32,7 +32,6 @@ public:
     double calculateF(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
     /** Calculate the G function used to calculate the next v_ij */
     double calculateG(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
-
 };
 
 
