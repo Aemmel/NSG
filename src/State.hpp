@@ -10,6 +10,7 @@
 #include <functional>
 
 #include "Common.hpp"
+#include "Options.hpp"
 
 /**
  * Instances of this classes contains the current state of the system.
@@ -55,6 +56,8 @@ public:
      * @param dy The distance used between two cells in y direction
      */
     State(index_t width, index_t height, double dx, double dy, double t);
+
+    State(const Options &options, double t);
 
     void fillWithFunction(GRID grid, const std::function<double(double, double)>& func);
 

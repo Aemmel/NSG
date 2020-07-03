@@ -44,12 +44,13 @@ double TimeStepper::calculateG(const State &state, const Stencils &stencils, dou
     return v[i][j] + dt * dt_brace;
 }
 
-TimeStepper::TimeStepper(double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau) :
-dx_(dx), dy_(dy), Re_(re), gx_(gx), gy_(gy), rel_eps_(rel_eps), safety_tau_(safety_tau_)
+TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau) :
+dx_(dx), dy_(dy), Re_(re), gx_(gx), gy_(gy), rel_eps_(rel_eps), safety_tau_(safety_tau), boundary_(boundary)
 {
+    
 }
 
-TimeStepper::TimeStepper(const Options &options)
+TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, const Options &options): boundary_(boundary)
 {
     dx_ = options.getDx();
     dy_ = options.getDy();

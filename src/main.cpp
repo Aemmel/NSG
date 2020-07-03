@@ -18,9 +18,9 @@ int main()
 {
     try {
         Options options = Options("data/options.json");
-        State state = State(options.getCellCntX(), options.getCellCntY(), options.getDx(), options.getDy());
+        State state = State(options, 0.0);
 
-        TimeStepper stepper(options);
+        //TimeStepper stepper(options);
 
         //Fill with known functions
         /*state.fillWithFunction(State::GRID::U, [](double y, double x) { return cos(x) * cos(y); });

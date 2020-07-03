@@ -77,6 +77,17 @@ void State::fillWithFunction(GRID grid, const std::function<double(double, doubl
     }
 }
 
+State::State(const Options &options, double t)
+{
+    width_ = options.getCellCntX();
+    height_ = options.getCellCntY();
+
+    dx_ = options.getDx();
+    dy_ = options.getDy();
+
+    t_ = t;
+}
+
 
 
 

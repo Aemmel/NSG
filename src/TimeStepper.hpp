@@ -9,6 +9,7 @@
 #include "Stencils.hpp"
 #include "State.hpp"
 #include "Options.hpp"
+#include "AbstractBoundaryCondidtion.hpp"
 
 class TimeStepper {
 private:
@@ -29,10 +30,12 @@ private:
     // safety tau for choosing the next time step
     double safety_tau_;
 
-public:
-    TimeStepper(double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau);
+    const AbstractBoundaryCondition &boundary_;
 
-    explicit TimeStepper(const Options &options);
+public:
+    TimeStepper(const AbstractBoundaryCondition &boundary, double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau);
+
+    explicit TimeStepper(const AbstractBoundaryCondition &boundary, const Options &options);
 
     /** Calculae the F function used to calculate the next u_ij */
     double calculateF(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
