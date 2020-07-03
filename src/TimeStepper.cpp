@@ -4,6 +4,8 @@
 
 #include "TimeStepper.hpp"
 
+#include <vector>
+
 using PARAM = Stencils::PARAM;
 
 double TimeStepper::calculateF(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const
@@ -42,6 +44,26 @@ double TimeStepper::calculateG(const State &state, const Stencils &stencils, dou
 
     // F_ij = v_ij + dt * [...]
     return v[i][j] + dt * dt_brace;
+}
+
+double TimeStepper::calculateRHS(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const
+{
+    // F_i_j - F_(i-1)_j
+    double temp_f = calculateF(state, stencils, dt, i, j) - calculateF(state, stencils, dt, i-1, j);
+    // G_i_j - G_i_(j-1)
+    double temp_g = calculateG(state, stencils, dt, i, j) - calculateG(state, stencils, dt, i, j-1);
+
+    return ( temp_f / state.getDX() + temp_g / state.getDY() ) / dt;
+}
+
+
+State TimeStepper::step(const State& curr_step)
+{
+    State next_step(curr_step.getCellCountX(), curr_step.getCellCountY(), curr_step.getDX(), curr_step.getDY(), curr_step.getTime());
+
+    // calc
+
+    return next_step;
 }
 
 TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau) :

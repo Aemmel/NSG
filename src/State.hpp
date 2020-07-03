@@ -96,6 +96,9 @@ public:
      * @return
      */
     double getHeight() const;
+
+    // get time
+    double getTime() const;
 };
 
 

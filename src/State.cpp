@@ -27,28 +27,39 @@ State::State(index_t width, index_t height, double dx, double dy, double t)
     p = vector<vector<double>>(width_, vector<double>(height_));
 }
 
-index_t State::getCellCountX() const {
+index_t State::getCellCountX() const 
+{
     return width_;
 }
 
-index_t State::getCellCountY() const {
+index_t State::getCellCountY() const 
+{
     return height_;
 }
 
-double State::getDX() const {
+double State::getDX() const 
+{
     return dx_;
 }
 
-double State::getDY() const {
+double State::getDY() const 
+{
     return dy_;
 }
 
-double State::getWidth() const {
+double State::getWidth() const 
+{
     return width_;
 }
 
-double State::getHeight() const {
+double State::getHeight() const 
+{
     return height_;
+}
+
+double State::getTime() const
+{
+
 }
 
 void State::fillWithFunction(GRID grid, const std::function<double(double, double)>& func)

@@ -23,6 +23,10 @@ Options::Options(const std::string& file_name)
     cell_cnt_x_ = j["cell_cnt_x"];
     cell_cnt_y_ = j["cell_cnt_y"];
 
+    if (cell_cnt_x_ < 3 || cell_cnt_y_ < 3) {
+        throw std::runtime_error("cell_cnt_x/y needs to be 3 or larger!");
+    }
+
     dx_ = j["dx"];
     dy_ = j["dy"];
 

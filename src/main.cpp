@@ -18,7 +18,9 @@ int main()
 {
     try {
         Options options = Options("data/options.json");
+
         State state = State(options, 0.0);
+
 
         //TimeStepper stepper(options);
 

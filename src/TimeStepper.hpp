@@ -37,13 +37,16 @@ public:
 
     explicit TimeStepper(const AbstractBoundaryCondition &boundary, const Options &options);
 
+    State step(const State& curr_step);
+
+private:
     /** Calculae the F function used to calculate the next u_ij */
     double calculateF(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
     /** Calculate the G function used to calculate the next v_ij */
     double calculateG(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
 
-
-    matrix_t next_step(const State& curr_step);
+    /** Calculate RHS matrix, found in equation (41) in the instructions */
+    double calculateRHS(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
 };
 
 
