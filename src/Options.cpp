@@ -32,6 +32,11 @@ Options::Options(const std::string& file_name)
 
     max_time_ = j["max_time"];
 
+    gx_ = j["force_x"];
+    gy_ = j["force_y"];
+
+    safety_tau_ = j["safety_tau"];
+
     json_file.close();
 }
 
@@ -68,4 +73,19 @@ double Options::getRelEps() const
 double Options::getMaxTime() const
 {
     return max_time_;
+}
+
+double Options::getForceX() const
+{
+    return gx_;
+}
+
+double Options::getForceY() const
+{
+    return gy_;
+}
+
+double Options::getSafetyTau() const
+{
+    return safety_tau_;
 }

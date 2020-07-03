@@ -44,8 +44,8 @@ double TimeStepper::calculateG(const State &state, const Stencils &stencils, dou
     return v[i][j] + dt * dt_brace;
 }
 
-TimeStepper::TimeStepper(double dx, double dy, double re, double gx, double gy) :
-dx_(dx), dy_(dy), Re_(re), gx_(gx), gy_(gy)
+TimeStepper::TimeStepper(double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau) :
+dx_(dx), dy_(dy), Re_(re), gx_(gx), gy_(gy), rel_eps_(rel_eps), safety_tau_(safety_tau_)
 {
 }
 
@@ -59,4 +59,6 @@ TimeStepper::TimeStepper(const Options &options)
     //TODO: Implement gravity.
     gx_ = 0;
     gy_ = 0;
+
+    rel_eps_ = options.getRelEps();
 }

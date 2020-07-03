@@ -24,6 +24,12 @@ private:
 
     double max_time_;
 
+    // external force
+    double gx_;
+    double gy_;
+
+    double safety_tau_;
+
 public:
     Options(const std::string& file_name);
 
@@ -38,6 +44,11 @@ public:
     double getRelEps() const;
 
     double getMaxTime() const;
+
+    double getForceX() const;
+    double getForceY() const;
+
+    double getSafetyTau() const;
 };
 
 #endif // NSG_OPTIONS_HPP

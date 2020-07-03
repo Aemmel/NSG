@@ -23,8 +23,14 @@ private:
     /** Gravity in y direction */
     double gy_;
 
+    // relative epsilon for residual
+    double rel_eps_;
+
+    // safety tau for choosing the next time step
+    double safety_tau_;
+
 public:
-    TimeStepper(double dx, double dy, double re, double gx, double gy);
+    TimeStepper(double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau);
 
     explicit TimeStepper(const Options &options);
 
@@ -32,6 +38,9 @@ public:
     double calculateF(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
     /** Calculate the G function used to calculate the next v_ij */
     double calculateG(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
+
+
+    matrix_t next_step(const State& curr_step);
 };
 
 
