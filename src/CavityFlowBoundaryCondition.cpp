@@ -11,7 +11,7 @@ matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const 
     index_t width = p[0].size();
     index_t height = p.size();
 
-    //The manual does not give a proper equation how to fill the corner ghost cells
+    //The manual does not give a proper equation for how to fill the corner ghost cells
     //They are not accessed, so just fill it with its neighbor ghost value
 
     //Fill ghost cells in row

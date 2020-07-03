@@ -9,6 +9,7 @@
 
 class AbstractBoundaryCondition
 {
+public:
     virtual matrix_t applyPBoundaries(const matrix_t &p) const = 0;
     virtual matrix_t applyUBoundaries(const matrix_t &u) const = 0;
     virtual matrix_t applyVBoundaries(const matrix_t &v) const = 0;

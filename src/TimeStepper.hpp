@@ -46,7 +46,9 @@ private:
     double calculateG(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
 
     /** Calculate RHS matrix, found in equation (41) in the instructions */
-    double calculateRHS(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
+    matrix_t calculateRHS(const State &state, const Stencils &stencils, double dt) const;
+
+    matrix_t calculateRHS_test(const State &state, const Stencils &stencils, double dt) const;
 };
 
 
