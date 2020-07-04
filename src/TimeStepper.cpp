@@ -6,6 +6,7 @@
 #include "SOR.hpp"
 
 #include <vector>
+#include <iostream>
 
 using PARAM = Stencils::PARAM;
 
@@ -73,8 +74,8 @@ matrix_t TimeStepper::calculateRHS_test(const State &state, const Stencils &sten
     matrix_t RHS = matrix_t(state.getCellCountX(), std::vector<double>(state.getCellCountY()));
 
     // remember we don't want ghost cells
-    for (index_t i = 1; i < RHS.size(); i++) {
-        for (index_t j = 1; j < RHS[i].size(); j++) {
+    for (index_t i = 0; i < RHS.size(); i++) {
+        for (index_t j = 0; j < RHS[i].size(); j++) {
             RHS[i][j] = - 2 * state.p[i][j];
         }
     }
@@ -84,12 +85,12 @@ matrix_t TimeStepper::calculateRHS_test(const State &state, const Stencils &sten
 
 State TimeStepper::step(const State& curr_step)
 {
-    State next_step(curr_step.getCellCountX(), curr_step.getCellCountY(), curr_step.getDX(), curr_step.getDY(), curr_step.getTime());
-    SOR sor_solver(boundary_, curr_step.p, curr_step.getDX(), curr_step.getDY(), rel_eps_, SOR::NORM::L2);
-    Stencils stencils(curr_step.getDX(), curr_step.getDY(), 0.5);
+    State next_step = State(curr_step.getCellCountX(), curr_step.getCellCountY(), curr_step.getDX(), curr_step.getDY(), curr_step.getTime());   
+    SOR sor_solver = SOR(boundary_, curr_step.p, curr_step.getDX(), curr_step.getDY(), rel_eps_, SOR::NORM::L2);
+    Stencils stencils = Stencils(curr_step.getDX(), curr_step.getDY(), 0.5);
 
     // test only with p
-    next_step.p = sor_solver.new_field(calculateRHS_test(curr_step, stencils, 0), 1.5);
+    next_step.p = sor_solver.new_field(calculateRHS_test(curr_step, stencils, 0), 1.7);
 
     return next_step;
 }
@@ -112,4 +113,6 @@ TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, const Option
     gy_ = 0;
 
     rel_eps_ = options.getRelEps();
+
+    safety_tau_ = options.getSafetyTau();
 }

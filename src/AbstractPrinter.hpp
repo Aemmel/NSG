@@ -8,7 +8,7 @@
 #include "State.hpp"
 
 class AbstractPrinter {
-    virtual void print(State state, double time) = 0;
+    virtual void print(const State &state, double time) = 0;
 };
 
 

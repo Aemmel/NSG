@@ -36,9 +36,10 @@ void CSVPrinter::printVector(std::ofstream& stream, const matrix_t& array)
     // remember that our array is transposed
     // so we have to first go over the columns and then over the rows
     // since we always have rectangular grids this should be fine. Otherwise this would break, since not every row is array[0].size() long
-    for (index_t j = 0; j < array[0].size(); j++) {
-        for (index_t i = 0; i < array.size(); i++) {
-            delim = (i < array.size() - 1) ? '\t' : ' '; // use tab unless we're in the last column, then use harmless space
+    // remember we don't want the ghost cells
+    for (index_t j = 1; j < array[0].size() - 1; j++) {
+        for (index_t i = 1; i < array.size() - 1; i++) {
+            delim = (i < array.size() - 2) ? '\t' : ' '; // use tab unless we're in the last column, then use harmless space
 
             stream << array[i][j] << delim;
         }
@@ -46,7 +47,7 @@ void CSVPrinter::printVector(std::ofstream& stream, const matrix_t& array)
     }
 }
 
-void CSVPrinter::print(State state, double time) {
+void CSVPrinter::print(const State &state, double time) {
     std::ofstream file;
 
     //Print u

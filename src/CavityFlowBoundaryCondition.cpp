@@ -3,27 +3,36 @@
 //
 
 #include "CavityFlowBoundaryCondition.hpp"
-
+#include <iostream>
+#include <cmath>
 
 matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const {
     auto copy = matrix_t(p);
 
-    index_t width = p[0].size();
-    index_t height = p.size();
+    index_t width = p.size();
+    index_t height = p[0].size();
 
     //The manual does not give a proper equation for how to fill the corner ghost cells
     //They are not accessed, so just fill it with its neighbor ghost value
 
     //Fill ghost cells in row
-    for (index_t j=0; j < width; j++) {
+    for (index_t j=1; j < height-1; j++) {
         copy[0][j] = p[1][j];
         copy[width - 1][j] = p[width - 2][j];
+        /*copy[0][j] = 0;
+        copy[width - 1][j] = sin((width-1)*options_.getDx())*cos(j*options_.getDy());*/
+        /*copy[0][j] = 0;
+        copy[width - 1][j] = 0;*/
     }
 
     //Fill column ghost cells
-    for (index_t i=0; i < height; i++) {
+    for (index_t i=1; i < width-1; i++) {
         copy[i][0] = p[i][1];
         copy[i][height - 1] = copy[i][height - 2];
+        /*copy[i][0] = sin(i*options_.getDx());
+        copy[i][height-1] = sin(i*options_.getDx())*cos((height-1)*options_.getDy());*/
+        /*copy[i][0] = 0;
+        copy[i][height-1] = 0;*/
     }
 
     return copy;
@@ -74,7 +83,8 @@ matrix_t CavityFlowBoundaryCondition::applyVBoundaries(const matrix_t &v) const 
     return copy;
 }
 
-CavityFlowBoundaryCondition::CavityFlowBoundaryCondition(const Options &options)
+CavityFlowBoundaryCondition::CavityFlowBoundaryCondition(const Options &options) :
+options_(options)
 {
     velocity_ = 0;
 }

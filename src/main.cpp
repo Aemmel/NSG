@@ -10,6 +10,8 @@
 #include "Options.hpp"
 #include "Stencils.hpp"
 #include "TimeStepper.hpp"
+#include "CavityFlowBoundaryCondition.hpp"
+#include "AbstractBoundaryCondidtion.hpp"
 
 void testStencils();
 void testStencilFG();
@@ -19,8 +21,38 @@ int main()
     try {
         Options options = Options("data/options.json");
 
-        State state = State(options, 0.0);
+        State state(options, 0.0);
 
+        CavityFlowBoundaryCondition boundary = CavityFlowBoundaryCondition(options);
+
+        TimeStepper t_step = TimeStepper(boundary, options);
+
+        // fill with ones for start
+        for (index_t i = 0; i < state.getCellCountX(); i++) {
+            for (index_t j = 0; j < state.getCellCountY(); j++) {
+                //state.p[i][j] = 1;
+                state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy()) + 0.2;
+            }
+        }
+
+        for (index_t i = 2; i < state.getCellCountX() - 2; i++) {
+            for (index_t j = 2; j < state.getCellCountY() - 2; j++) {
+                //state.p[i][j] = 1;
+                //state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy()) / 5;
+            }
+        }
+
+        /*for (auto i : state.p) {
+            for (auto j : i) {
+                std::cout << j << " ";
+            }
+            std::cout << std::endl;
+        }*/
+
+        // Dirichlet boundary condition for p(x,y) = sin(x)cos(y)
+
+
+        state = t_step.step(state);
 
         //TimeStepper stepper(options);
 
@@ -32,10 +64,11 @@ int main()
 
         // try out stencils with known functions
         //testStencils();
-        testStencilFG();
+        //testStencilFG();
 
         CSVPrinter printer;
-        //printer.print(state, 0);
+
+        printer.print(state, 0);
         //Output the state to files
     }
     catch (const std::exception& e) {

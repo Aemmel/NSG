@@ -59,7 +59,7 @@ double State::getHeight() const
 
 double State::getTime() const
 {
-
+    
 }
 
 void State::fillWithFunction(GRID grid, const std::function<double(double, double)>& func)
@@ -88,15 +88,10 @@ void State::fillWithFunction(GRID grid, const std::function<double(double, doubl
     }
 }
 
-State::State(const Options &options, double t)
+State::State(const Options &options, double t) :
+ State(options.getCellCntX(), options.getCellCntY(), options.getDx(), options.getDy(), t)
 {
-    width_ = options.getCellCntX();
-    height_ = options.getCellCntY();
-
-    dx_ = options.getDx();
-    dy_ = options.getDy();
-
-    t_ = t;
+    
 }
 
 

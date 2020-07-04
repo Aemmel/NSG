@@ -22,7 +22,7 @@ private:
 public:
     CSVPrinter(): CSVPrinter("out/nsg_", "dat") {};
     CSVPrinter(std::string file_prefix, std::string extension);
-    void print(State state, double time) override;
+    void print(const State &state, double time) override;
 
     void printMatrix(const matrix_t& m, std::string file_name);
 };

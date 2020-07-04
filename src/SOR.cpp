@@ -2,48 +2,57 @@
 
 #include <functional>
 #include <cmath>
+#include <iostream>
 
 SOR::SOR(const AbstractBoundaryCondition &boundary, const matrix_t &orig_field, double dx, double dy, double rel_eps, NORM norm) :
 boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps), norm_(norm)
 {
-
+    // mostly to fix the size
+    curr_field_ = matrix_t(orig_field); 
+    next_field_ = matrix_t(orig_field);
 }
 
 matrix_t SOR::new_field(const matrix_t &RHS, double omega)
 {
-    auto field = matrix_t(orig_field_);
     matrix_t res;
+
+    int cnt = 0;
+    int max_cnt = 10000;
 
     // main loop to calculte the new field
     do {
         // calculate new field
-        field = newIteration(field, RHS, omega);
+        newIteration(RHS, omega);
+
+        curr_field_ = next_field_;
 
         // calculate residual
-        res = calculateRes(field, RHS);
-    } while(resBelowError(res));
+        res = calculateRes(next_field_, RHS);
+
+        cnt++;
+    } while(resBelowError(res) == false && cnt < max_cnt);
+
+    std::cout << "SOR Solver took " << cnt << " iterations, with a maximum allowed of " << max_cnt << std::endl;
+
+    return curr_field_;
 }
 
-matrix_t SOR::newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega)
+void SOR::newIteration(const matrix_t &RHS, double omega)
 {
-    // curr_field == p^it
-    // new_field == p^(it+1)
-    auto new_field = boundary_.applyPBoundaries(curr_field); // initialize new field and automatically apply boundary condidition
+    next_field_ = boundary_.applyPBoundaries(curr_field_);
 
     // remember we don't want the ghost cells
-    for (index_t i = 1; i < new_field.size() - 1; i++) {
-        for (index_t j = 1; j < new_field[i].size() - 1; j++) {
+    for (index_t i = 1; i < next_field_.size() - 1; i++) {
+        for (index_t j = 1; j < next_field_[i].size() - 1; j++) {
             // we break the term up into:
             // (1-w)p_i_j + fac * (temp_x / dx^2 + temp_y / dy^2 - RHS_i_j)
-            double fac = omega / 2 / (1/std::pow(dx_, 2) + 1/std::pow(dy_, 2));
-            double temp_x = curr_field[i+1][j] + new_field[i-1][j];
-            double temp_y = curr_field[i][j+1] + new_field[i][j-1];
+            double fac = omega / (2.0 * (1.0/(dx_*dx_) + 1.0/(dy_*dy_)));
+            double temp_x = curr_field_[i+1][j] + next_field_[i-1][j];
+            double temp_y = curr_field_[i][j+1] + next_field_[i][j-1];
 
-            new_field[i][j] = (1-omega)*curr_field[i][j] + fac*(temp_x / std::pow(dx_, 2) + temp_y / std::pow(dy_, 2) - RHS[i][j]);
+            next_field_[i][j] = (1-omega)*curr_field_[i][j] + fac*(temp_x / (dx_ * dx_) + temp_y / (dy_ * dy_) - RHS[i][j]);
         }
     }
-    
-    return new_field;
 }
 
 matrix_t SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS)
@@ -59,7 +68,7 @@ matrix_t SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS)
             // p_i_(j+1) - 2p_i_j + p_i_(j-1)
             double temp_y = new_field[i][j+1] - 2*new_field[i][j] + new_field[i][j-1];
 
-            res[i][j] = temp_x / std::pow(dx_, 2) + temp_y / std::pow(dy_, 2) - RHS[i][j];
+            res[i][j] = temp_x / (dx_*dx_) + temp_y / (dy_*dy_) - RHS[i][j];
         }
     }
 

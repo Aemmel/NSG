@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
+from mpl_toolkits.mplot3d import Axes3D
 import json
 
 # configure pyplot
@@ -25,6 +26,7 @@ obj = json.loads(data)
 # read in data
 data_u = np.array(pd.read_csv("out/nsg_u_0.000000.dat", delimiter="\t", header=None))
 data_v = np.array(pd.read_csv("out/nsg_v_0.000000.dat", delimiter="\t", header=None))
+data_p = np.array(pd.read_csv("out/nsg_p_0.000000.dat", delimiter="\t", header=None))
 
 #data_test_func = np.transpose(np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None)))
 data_test_func = np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None))
@@ -36,9 +38,9 @@ X,Y = np.meshgrid(x, y)
 #x_data = x
 x_data = y
 
-plt.plot(x_data, data_test_func, label="numeric")
-plt.plot(x_data, np.sin(x_data)*np.cos(x_data), label="orig")
-plt.plot(x_data, np.cos(x_data)**2 - np.sin(x_data)**2, label="analytic")
+#plt.plot(x_data, data_test_func, label="numeric")
+#plt.plot(x_data, np.sin(x_data)*np.cos(x_data), label="orig")
+#plt.plot(x_data, np.cos(x_data)**2 - np.sin(x_data)**2, label="analytic")
 
 
 #fig, ax = plt.subplots()
@@ -48,6 +50,13 @@ plt.plot(x_data, np.cos(x_data)**2 - np.sin(x_data)**2, label="analytic")
 
 # streamplot (integralcurve)
 # ax.streamplot(X, Y, data_u, data_v, density=2)
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection="3d")
+
+ax.plot_surface(X, Y, data_p)
+Z = np.sin(X)*np.cos(Y)
+ax.plot_wireframe(X, Y, Z+ (data_p[99][99]-Z[99][99]), color="red", rcount=10, ccount=10)
 
 plt.legend(loc="best")
 

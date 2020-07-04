@@ -13,6 +13,8 @@ private:
     
     // starting field, it = 0
     const matrix_t &orig_field_;
+    matrix_t curr_field_;
+    matrix_t next_field_;
 
     double dx_;
     double dy_;
@@ -25,7 +27,8 @@ public:
 
     matrix_t new_field(const matrix_t &RHS, double omega);
 private:
-    matrix_t newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega);
+    //matrix_t newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega);
+    void newIteration(const matrix_t &RHS, double omega);
 
     matrix_t calculateRes(const matrix_t &new_field, const matrix_t &RHS);
 

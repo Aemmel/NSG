@@ -14,6 +14,7 @@ class CavityFlowBoundaryCondition : public AbstractBoundaryCondition {
 private:
     double velocity_ = 0;
 
+    Options options_;
 public:
     explicit CavityFlowBoundaryCondition(const Options &options);
 
