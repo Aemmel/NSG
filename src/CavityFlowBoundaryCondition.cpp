@@ -40,3 +40,8 @@ matrix_t CavityFlowBoundaryCondition::applyVBoundaries(const matrix_t &v) const 
 
     return copy;
 }
+
+CavityFlowBoundaryCondition::CavityFlowBoundaryCondition(const Options &options)
+{
+
+}

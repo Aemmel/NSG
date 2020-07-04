@@ -9,12 +9,14 @@
 #include "Options.hpp"
 #include "AbstractBoundaryCondidtion.hpp"
 
-class CavityFlowBoundaryCondition : AbstractBoundaryCondition {
+class CavityFlowBoundaryCondition : public AbstractBoundaryCondition {
 
 private:
 
 public:
     CavityFlowBoundaryCondition(const Options &options);
+
+    CavityFlowBoundaryCondition();
 
 
     matrix_t applyPBoundaries(const matrix_t &p) const override;
