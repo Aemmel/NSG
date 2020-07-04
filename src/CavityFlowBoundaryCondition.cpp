@@ -32,16 +32,49 @@ matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const 
 matrix_t CavityFlowBoundaryCondition::applyUBoundaries(const matrix_t &u) const {
     auto copy = matrix_t(u);
 
+    auto width = copy[0].size();
+    auto height = copy.size();
+
+    //Set no slip condition for u
+    //We have to iterate until u.size() - 1 because last index is a ghost cell
+    for (index_t j = 1; j < width - 1; j++) {
+        copy[0][j] = 0;
+
+        //Set top row to velocity
+        copy[height - 1][j] = velocity_;
+    }
+
+    for (index_t i = 1; i < height - 1; i++) {
+        copy[i][0] = - copy[i][1];
+        copy[i][width - 1] = copy[i][width - 2];
+    }
+
+
     return copy;
 }
 
 matrix_t CavityFlowBoundaryCondition::applyVBoundaries(const matrix_t &v) const {
     auto copy = matrix_t(v);
 
+    auto height = copy.size();
+    auto width = copy[0].size();
+
+    //Set no slip condition for u
+    //We have to iterate until u.size() - 1 because last index is a ghost cell
+    for (index_t i = 1; i < height - 1; i++) {
+        copy[i][width] = 0;
+        copy[i][width - 1] = 0;
+    }
+
+    for (index_t j = 1; j < width - 1; j++) {
+        copy[0][j] = - v[1][j];
+        copy[height - 1][j] = - v[height - 2][j];
+    }
+
     return copy;
 }
 
 CavityFlowBoundaryCondition::CavityFlowBoundaryCondition(const Options &options)
 {
-
+    velocity_ = 0;
 }
