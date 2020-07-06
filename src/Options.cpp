@@ -41,6 +41,10 @@ Options::Options(const std::string& file_name)
 
     safety_tau_ = j["safety_tau"];
 
+    omega_ = j["omega"];
+
+    SOR_max_it_ = j["SOR_max_it"];
+
     json_file.close();
 }
 
@@ -92,4 +96,14 @@ double Options::getForceY() const
 double Options::getSafetyTau() const
 {
     return safety_tau_;
+}
+
+double Options::getOmega() const
+{
+    return omega_;
+}
+
+index_t Options::getSORMaxIt() const
+{
+    return SOR_max_it_;
 }

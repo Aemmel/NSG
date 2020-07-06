@@ -1,12 +1,14 @@
 {
     "cell_cnt_x": 200,
     "cell_cnt_y": 200,
-    "dx": 0.1,
-    "dy": 0.1,
+    "dx": 0.05,
+    "dy": 0.05,
     "reynold": 10,
     "rel_epsilon": 1e-5,
     "max_time": 10.2,
     "force_x": 0.0,
     "force_y": 0.0,
-    "safety_tau": 0.5
+    "safety_tau": 0.5,
+    "omega": 1.7,
+    "SOR_max_it": 2e4
 }

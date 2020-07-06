@@ -77,8 +77,7 @@ matrix_t TimeStepper::calculateRHS_test(const State &state, const Stencils &sten
     // remember we don't want ghost cells
     for (index_t i = 0; i < RHS.size(); i++) {
         for (index_t j = 0; j < RHS[i].size(); j++) {
-            //RHS[i][j] = - 2 * state.p[i][j];
-            RHS[i][j] = - 2 * cos(i * state.getDX()) * sin(j * state.getDY());
+            RHS[i][j] = - 2 * state.p[i][j];
         }
     }
 
@@ -92,13 +91,13 @@ State TimeStepper::step(const State& curr_step)
     Stencils stencils = Stencils(curr_step.getDX(), curr_step.getDY(), 0.5);
 
     // test only with p
-    next_step.p = sor_solver.newField(calculateRHS_test(curr_step, stencils, 0), 1.7);
+    next_step.p = sor_solver.newFieldTest(calculateRHS_test(curr_step, stencils, 0), omega_, SOR_max_it_);
 
     return next_step;
 }
 
-TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau) :
-dx_(dx), dy_(dy), Re_(re), gx_(gx), gy_(gy), rel_eps_(rel_eps), safety_tau_(safety_tau), boundary_(boundary)
+TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau, double omega, index_t SOR_max_it) :
+boundary_(boundary), dx_(dx), dy_(dy), Re_(re), gx_(gx), gy_(gy), rel_eps_(rel_eps), safety_tau_(safety_tau), omega_(omega), SOR_max_it_(SOR_max_it)
 {
     
 }
@@ -117,4 +116,8 @@ TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, const Option
     rel_eps_ = options.getRelEps();
 
     safety_tau_ = options.getSafetyTau();
+
+    omega_ = options.getOmega();
+
+    SOR_max_it_ = options.getSORMaxIt();
 }

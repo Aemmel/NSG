@@ -12,12 +12,11 @@ boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps
     next_field_ = matrix_t(orig_field);
 }
 
-matrix_t SOR::newField(const matrix_t &RHS, double omega)
+matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
 {
     matrix_t res;
 
-    int cnt = 0;
-    int max_cnt = 10000;
+    index_t cnt = 0;
 
     // main loop to calculte the new field
     do {
@@ -30,9 +29,51 @@ matrix_t SOR::newField(const matrix_t &RHS, double omega)
         res = calculateRes(next_field_, RHS);
 
         cnt++;
-    } while(!resBelowError(res) && cnt < max_cnt);
+    } while(!resBelowError(res) && cnt < max_it);
 
-    std::cout << "SOR Solver took " << cnt << " iterations, with a maximum allowed of " << max_cnt << std::endl;
+    // inform not only how long it took, but also if it converged quickly enough
+    std::cout << "SOR Solver took " << cnt << " iterations";
+    if (cnt == max_it) {
+        std::cout << ". Maximum was reached";
+    }
+    std::cout << std::endl;
+
+    return curr_field_;
+}
+
+matrix_t SOR::newFieldTest(const matrix_t &RHS, double omega, index_t max_it)
+{
+    matrix_t res;
+    matrix_t rhs = matrix_t(RHS);
+
+    index_t cnt = 0;
+
+    // main loop to calculte the new field
+    do {
+        // calculate new field
+        newIteration(RHS, omega);
+
+        curr_field_ = next_field_;
+
+        // calculate residual
+        res = calculateRes(next_field_, RHS);
+
+        // calculate new RHS
+        for (index_t i = 0; i < RHS.size(); i++) {
+            for (index_t j = 0; j < RHS[i].size(); j++) {
+                rhs[i][j] = - 2 * next_field_[i][j];
+            }
+        }
+
+        cnt++;
+    } while(!resBelowError(res) && cnt < max_it);
+
+    // inform not only how long it took, but also if it converged quickly enough
+    std::cout << "SOR Solver took " << cnt << " iterations";
+    if (cnt == max_it) {
+        std::cout << ". Maximum was reached";
+    }
+    std::cout << std::endl;
 
     return curr_field_;
 }

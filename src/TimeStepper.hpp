@@ -13,6 +13,8 @@
 
 class TimeStepper {
 private:
+    const AbstractBoundaryCondition &boundary_;
+
     double dx_;
     double dy_;
 
@@ -30,10 +32,14 @@ private:
     // safety tau for choosing the next time step
     double safety_tau_;
 
-    const AbstractBoundaryCondition &boundary_;
+    // omega for SOR Solver
+    double omega_;
+    
+    // Iteration cap for SOR Solver
+    index_t SOR_max_it_;
 
 public:
-    TimeStepper(const AbstractBoundaryCondition &boundary, double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau);
+    TimeStepper(const AbstractBoundaryCondition &boundary, double dx, double dy, double re, double gx, double gy, double rel_eps, double safety_tau, double omega, index_t SOR_max_it);
 
     explicit TimeStepper(const AbstractBoundaryCondition &boundary, const Options &options);
 

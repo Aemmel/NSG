@@ -30,6 +30,10 @@ private:
 
     double safety_tau_;
 
+    double omega_;
+
+    index_t SOR_max_it_;
+
 public:
     Options(const std::string& file_name);
 
@@ -49,6 +53,10 @@ public:
     double getForceY() const;
 
     double getSafetyTau() const;
+
+    double getOmega() const;
+
+    index_t getSORMaxIt() const;
 };
 
 #endif // NSG_OPTIONS_HPP

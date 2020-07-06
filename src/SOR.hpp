@@ -2,6 +2,7 @@
 #define HEADER_SOR_HPP
 
 #include "AbstractBoundaryCondidtion.hpp"
+#include "Common.hpp"
 
 class SOR
 {
@@ -25,7 +26,8 @@ private:
 public:
     SOR(const AbstractBoundaryCondition &boundary, const matrix_t &orig_field, double dx, double dy, double rel_eps, NORM norm);
 
-    matrix_t newField(const matrix_t &RHS, double omega);
+    matrix_t newField(const matrix_t &RHS, double omega, index_t max_it);
+    matrix_t newFieldTest(const matrix_t &RHS, double omega, index_t max_it);
 private:
     //matrix_t newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega);
     void newIteration(const matrix_t &RHS, double omega);
