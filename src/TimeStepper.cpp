@@ -78,6 +78,8 @@ matrix_t TimeStepper::calculateRHS_test(const State &state, const Stencils &sten
     for (index_t i = 0; i < RHS.size(); i++) {
         for (index_t j = 0; j < RHS[i].size(); j++) {
             RHS[i][j] = - 2 * state.p[i][j];
+            //RHS[i][j] = 2*(i*dx_ + j*dy_);
+            //RHS[i][j] = -state.p[i][j];
         }
     }
 

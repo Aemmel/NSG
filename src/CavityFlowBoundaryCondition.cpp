@@ -6,6 +6,8 @@
 #include <iostream>
 #include <cmath>
 
+#include "TestFunc.hpp"
+
 matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const {
     auto copy = matrix_t(p);
 
@@ -14,7 +16,7 @@ matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const 
 
     // von Neumann for actual fluid simulation
     // Dirichlet (von_neumann == false) for testing
-    bool von_neumann = false;
+    bool von_neumann = true;
 
     //The manual does not give a proper equation for how to fill the corner ghost cells
     //They are not accessed, so just fill it with its neighbor ghost value
@@ -26,8 +28,8 @@ matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const 
             copy[width - 1][j] = p[width - 2][j];
         }
         else {
-            copy[0][j] = 0;
-            copy[width - 1][j] = sin((width-1)*options_.getDx())*cos(j*options_.getDy());
+            copy[0][j] = test_func(0, j*options_.getDy());
+            copy[width - 1][j] = test_func((width-1)*options_.getDx(), j*options_.getDy());
         }
     }
 
@@ -38,8 +40,8 @@ matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const 
             copy[i][height - 1] = p[i][height - 2];
         }
         else {
-            copy[i][0] = sin(i*options_.getDx());
-            copy[i][height-1] = sin(i*options_.getDx())*cos((height-1)*options_.getDy());
+            copy[i][0] = test_func(i*options_.getDx(), 0);
+            copy[i][height-1] = test_func(i*options_.getDx(), (height-1)*options_.getDy());
         }
     }
 

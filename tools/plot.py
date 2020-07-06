@@ -56,6 +56,8 @@ ax = fig.add_subplot(111, projection="3d")
 
 ax.plot_surface(X, Y, data_p)
 Z = np.sin(X)*np.cos(Y)
+#Z = X*X*Y + Y*Y*X + X*Y
+#Z = np.sin(X)
 ax.plot_wireframe(X, Y, Z+ (data_p[99][99]-Z[99][99]), color="red", rcount=10, ccount=10)
 
 plt.legend(loc="best")

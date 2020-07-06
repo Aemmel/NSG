@@ -9,6 +9,6 @@
     "force_x": 0.0,
     "force_y": 0.0,
     "safety_tau": 0.5,
-    "omega": 1.7,
+    "omega": 1,
     "SOR_max_it": 2e4
 }

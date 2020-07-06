@@ -13,6 +13,8 @@
 #include "CavityFlowBoundaryCondition.hpp"
 #include "AbstractBoundaryCondidtion.hpp"
 
+#include "TestFunc.hpp"
+
 void testStencils();
 void testStencilFG();
 
@@ -31,7 +33,7 @@ int main()
         for (index_t i = 0; i < state.getCellCountX(); i++) {
             for (index_t j = 0; j < state.getCellCountY(); j++) {
                 //state.p[i][j] = 1;
-                state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy());
+                state.p[i][j] = test_func(i * options.getDx(), j * options.getDy()) + i*j/(state.getCellCountX()*state.getCellCountY());
             }
         }
 

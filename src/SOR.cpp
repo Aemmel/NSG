@@ -62,6 +62,7 @@ matrix_t SOR::newFieldTest(const matrix_t &RHS, double omega, index_t max_it)
         for (index_t i = 0; i < RHS.size(); i++) {
             for (index_t j = 0; j < RHS[i].size(); j++) {
                 rhs[i][j] = - 2 * next_field_[i][j];
+                //rhs[i][j] = - next_field_[i][j];
             }
         }
 
