@@ -30,12 +30,12 @@ private:
     //matrix_t newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega);
     void newIteration(const matrix_t &RHS, double omega);
 
-    matrix_t calculateRes(const matrix_t &new_field, const matrix_t &RHS);
+    matrix_t calculateRes(const matrix_t &new_field, const matrix_t &RHS) const;
 
     bool resBelowError(const matrix_t &res);
 
-    double normL2(const matrix_t &mat);
-    double normMAX(const matrix_t &mat);
+    double normL2(const matrix_t &mat) const;
+    double normMAX(const matrix_t &mat) const;
 };
 
 #endif // HEADER_SOR_HPP

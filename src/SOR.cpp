@@ -30,7 +30,7 @@ matrix_t SOR::new_field(const matrix_t &RHS, double omega)
         res = calculateRes(next_field_, RHS);
 
         cnt++;
-    } while(resBelowError(res) == false && cnt < max_cnt);
+    } while(!resBelowError(res) && cnt < max_cnt);
 
     std::cout << "SOR Solver took " << cnt << " iterations, with a maximum allowed of " << max_cnt << std::endl;
 
@@ -55,10 +55,10 @@ void SOR::newIteration(const matrix_t &RHS, double omega)
     }
 }
 
-matrix_t SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS)
+matrix_t SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS) const
 {
     // we trust the vector sizes are all compatible
-    matrix_t res = std::vector<std::vector<double>>(new_field.size(), std::vector<double>(new_field[0].size()));
+    matrix_t res = matrix_t(new_field.size(), std::vector<double>(new_field[0].size()));
 
     // remember we don't want the ghost cells
     for (index_t i = 1; i < res.size() - 1; i++) {
@@ -96,7 +96,7 @@ bool SOR::resBelowError(const matrix_t &res)
 /**
  * ||mat||_2 = (1/i_max/j_max sum_i=1^(i_max) sum_j=1^(j_max) (mat_i_j)^2)^(1/2)
  */ 
-double SOR::normL2(const matrix_t &mat)
+double SOR::normL2(const matrix_t &mat) const
 {
     double temp = 0;
     index_t i_max = mat.size() - 2;
@@ -115,7 +115,7 @@ double SOR::normL2(const matrix_t &mat)
 /**
  * ||mat||_\infty = max_(i,j) (|mat_i_j|)
  */ 
-double SOR::normMAX(const matrix_t &mat)
+double SOR::normMAX(const matrix_t &mat) const
 {
     double max = 0;
 

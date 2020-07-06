@@ -1,6 +1,6 @@
 {
-    "cell_cnt_x": 200,
-    "cell_cnt_y": 200,
+    "cell_cnt_x": 5,
+    "cell_cnt_y": 5,
     "dx": 0.1,
     "dy": 0.1,
     "reynold": 10,
