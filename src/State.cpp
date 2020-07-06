@@ -22,9 +22,9 @@ State::State(index_t width, index_t height, double dx, double dy, double t)
     // or how computers usually store 2D arrays. To compensate, we simply transpose the array in this step (width_ rows and height_ columns)
     // so that we can use the computer native notation from here on
     // though we ALWAYS have to remember, that we have width_ rows and height_ columns!!!!!
-    u = vector<vector<double>>(width_, vector<double>(height_));
-    v = vector<vector<double>>(width_, vector<double>(height_));
-    p = vector<vector<double>>(width_, vector<double>(height_));
+    u = matrix_t(width_, vector<double>(height_, 0));
+    v = matrix_t(width_, vector<double>(height_, 0));
+    p = matrix_t(width_, vector<double>(height_, 0));
 }
 
 index_t State::getCellCountX() const 
@@ -59,7 +59,7 @@ double State::getHeight() const
 
 double State::getTime() const
 {
-    
+    return t_;
 }
 
 void State::fillWithFunction(GRID grid, const std::function<double(double, double)>& func)
