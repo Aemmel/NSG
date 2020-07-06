@@ -31,13 +31,13 @@ int main()
         for (index_t i = 0; i < state.getCellCountX(); i++) {
             for (index_t j = 0; j < state.getCellCountY(); j++) {
                 //state.p[i][j] = 1;
-                state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy()) + 0.2;
+                state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy());
             }
         }
 
         for (index_t i = 2; i < state.getCellCountX() - 2; i++) {
             for (index_t j = 2; j < state.getCellCountY() - 2; j++) {
-                //state.p[i][j] = 1;
+                state.p[i][j] = 1;
                 //state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy()) / 5;
             }
         }

@@ -20,19 +20,15 @@ matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const 
         copy[0][j] = p[1][j];
         copy[width - 1][j] = p[width - 2][j];
         /*copy[0][j] = 0;
-        copy[width - 1][j] = sin((width-1)*options_.getDx())*cos(j*options_.getDy());*/
-        /*copy[0][j] = 0;
-        copy[width - 1][j] = 0;*/
+        copy[width - 1][j] = cos((width-1)*options_.getDx())*sin(j*options_.getDy());*/
     }
 
     //Fill column ghost cells
     for (index_t i=1; i < width-1; i++) {
         copy[i][0] = p[i][1];
-        copy[i][height - 1] = copy[i][height - 2];
+        copy[i][height - 1] = p[i][height - 2];
         /*copy[i][0] = sin(i*options_.getDx());
-        copy[i][height-1] = sin(i*options_.getDx())*cos((height-1)*options_.getDy());*/
-        /*copy[i][0] = 0;
-        copy[i][height-1] = 0;*/
+        copy[i][height-1] = cos(i*options_.getDx())*sin((height-1)*options_.getDy());*/
     }
 
     return copy;

@@ -12,7 +12,7 @@ boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps
     next_field_ = matrix_t(orig_field);
 }
 
-matrix_t SOR::new_field(const matrix_t &RHS, double omega)
+matrix_t SOR::newField(const matrix_t &RHS, double omega)
 {
     matrix_t res;
 

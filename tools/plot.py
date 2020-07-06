@@ -26,7 +26,7 @@ obj = json.loads(data)
 # read in data
 data_u = np.array(pd.read_csv("out/nsg_u_0.000000.dat", delimiter="\t", header=None))
 data_v = np.array(pd.read_csv("out/nsg_v_0.000000.dat", delimiter="\t", header=None))
-data_p = np.array(pd.read_csv("out/nsg_p_0.000000.dat", delimiter="\t", header=None))
+data_p = np.array(pd.read_csv("out/nsg_p_0.000000.dat", delimiter="\t", header=None), dtype=np.float64)
 
 #data_test_func = np.transpose(np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None)))
 data_test_func = np.array(pd.read_csv("out/nsg_test_file.dat", delimiter="\t", header=None))
@@ -55,7 +55,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111, projection="3d")
 
 ax.plot_surface(X, Y, data_p)
-Z = np.sin(X)*np.cos(Y)
+Z = np.cos(X)*np.sin(Y)
 ax.plot_wireframe(X, Y, Z+ (data_p[99][99]-Z[99][99]), color="red", rcount=10, ccount=10)
 
 plt.legend(loc="best")

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 using PARAM = Stencils::PARAM;
 
@@ -76,7 +77,8 @@ matrix_t TimeStepper::calculateRHS_test(const State &state, const Stencils &sten
     // remember we don't want ghost cells
     for (index_t i = 0; i < RHS.size(); i++) {
         for (index_t j = 0; j < RHS[i].size(); j++) {
-            RHS[i][j] = - 2 * state.p[i][j];
+            //RHS[i][j] = - 2 * state.p[i][j];
+            RHS[i][j] = - 2 * cos(i * state.getDX()) * sin(j * state.getDY());
         }
     }
 
@@ -90,7 +92,7 @@ State TimeStepper::step(const State& curr_step)
     Stencils stencils = Stencils(curr_step.getDX(), curr_step.getDY(), 0.5);
 
     // test only with p
-    next_step.p = sor_solver.new_field(calculateRHS_test(curr_step, stencils, 0), 1.7);
+    next_step.p = sor_solver.newField(calculateRHS_test(curr_step, stencils, 0), 1.7);
 
     return next_step;
 }
