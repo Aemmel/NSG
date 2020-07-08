@@ -51,16 +51,16 @@ matrix_t SOR::newFieldTest(const matrix_t &RHS, double omega, index_t max_it)
     // main loop to calculte the new field
     do {
         // calculate new field
-        newIteration(RHS, omega);
+        newIteration(rhs, omega);
 
         curr_field_ = next_field_;
 
         // calculate residual
-        res = calculateRes(next_field_, RHS);
+        res = calculateRes(next_field_, rhs);
 
         // calculate new RHS
-        for (index_t i = 0; i < RHS.size(); i++) {
-            for (index_t j = 0; j < RHS[i].size(); j++) {
+        for (index_t i = 0; i < rhs.size(); i++) {
+            for (index_t j = 0; j < rhs[i].size(); j++) {
                 rhs[i][j] = - 2 * next_field_[i][j];
                 //rhs[i][j] = - next_field_[i][j];
             }

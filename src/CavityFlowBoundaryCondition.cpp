@@ -16,7 +16,7 @@ matrix_t CavityFlowBoundaryCondition::applyPBoundaries(const matrix_t &p) const 
 
     // von Neumann for actual fluid simulation
     // Dirichlet (von_neumann == false) for testing
-    bool von_neumann = true;
+    bool von_neumann = false;
 
     //The manual does not give a proper equation for how to fill the corner ghost cells
     //They are not accessed, so just fill it with its neighbor ghost value

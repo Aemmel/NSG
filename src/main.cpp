@@ -32,8 +32,8 @@ int main()
         // fill with ones for start
         for (index_t i = 0; i < state.getCellCountX(); i++) {
             for (index_t j = 0; j < state.getCellCountY(); j++) {
-                //state.p[i][j] = 1;
-                state.p[i][j] = test_func(i * options.getDx(), j * options.getDy()) + i*j/(state.getCellCountX()*state.getCellCountY());
+                state.p[i][j] = 0;
+                //state.p[i][j] = test_func(i * options.getDx(), j * options.getDy());
             }
         }
 
