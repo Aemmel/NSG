@@ -28,6 +28,9 @@ public:
 
     matrix_t newField(const matrix_t &RHS, double omega, index_t max_it);
     matrix_t newFieldTest(const matrix_t &RHS, double omega, index_t max_it);
+
+    static double normL2(const matrix_t &mat);
+    static double normMAX(const matrix_t &mat);
 private:
     //matrix_t newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega);
     void newIteration(const matrix_t &RHS, double omega);
@@ -35,9 +38,6 @@ private:
     matrix_t calculateRes(const matrix_t &new_field, const matrix_t &RHS) const;
 
     bool resBelowError(const matrix_t &res);
-
-    double normL2(const matrix_t &mat) const;
-    double normMAX(const matrix_t &mat) const;
 };
 
 #endif // HEADER_SOR_HPP
