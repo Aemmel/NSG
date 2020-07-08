@@ -119,26 +119,29 @@ matrix_t SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS) const
 
 bool SOR::resBelowError(const matrix_t &res)
 {
-    std::function<double(const matrix_t&)> norm_func;
+    double res_norm;
+    double orig_norm;
 
     switch (norm_) {
     case NORM::L2:
-        norm_func = std::bind(&SOR::normL2, this, std::placeholders::_1);
+        res_norm = normL2(res);
+        orig_norm = normL2(orig_field_);
         break;
     case NORM::MAX:
-        norm_func = std::bind(&SOR::normMAX, this, std::placeholders::_1);
+        res_norm = normMAX(res);
+        orig_norm = normMAX(orig_field_);
         break;
     default:
         throw std::runtime_error("Non-existent norm used!");
     }
 
-    return norm_func(res) < rel_eps_ * norm_func(orig_field_);
+    return res_norm < rel_eps_ * orig_norm;
 }
 
 /**
  * ||mat||_2 = (1/i_max/j_max sum_i=1^(i_max) sum_j=1^(j_max) (mat_i_j)^2)^(1/2)
  */ 
-double SOR::normL2(const matrix_t &mat) const
+double SOR::normL2(const matrix_t &mat)
 {
     double temp = 0;
     index_t i_max = mat.size() - 2;
@@ -157,7 +160,7 @@ double SOR::normL2(const matrix_t &mat) const
 /**
  * ||mat||_\infty = max_(i,j) (|mat_i_j|)
  */ 
-double SOR::normMAX(const matrix_t &mat) const
+double SOR::normMAX(const matrix_t &mat)
 {
     double max = 0;
 

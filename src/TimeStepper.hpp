@@ -10,6 +10,7 @@
 #include "State.hpp"
 #include "Options.hpp"
 #include "AbstractBoundaryCondidtion.hpp"
+#include "SOR.hpp"
 
 class TimeStepper {
 private:
@@ -47,14 +48,20 @@ public:
 
 private:
     /** Calculae the F function used to calculate the next u_ij */
-    double calculateF(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
+    matrix_t calculateF(const State &state, const Stencils &stencils, double dt) const;
     /** Calculate the G function used to calculate the next v_ij */
-    double calculateG(const State &state, const Stencils &stencils, double dt, index_t i, index_t j) const;
+    matrix_t calculateG(const State &state, const Stencils &stencils, double dt) const;
 
     /** Calculate RHS matrix, found in equation (41) in the instructions */
-    matrix_t calculateRHS(const State &state, const Stencils &stencils, double dt) const;
+    matrix_t calculateRHS(const State &state, const Stencils &stencils, const matrix_t &F, const matrix_t &G, double dt) const;
 
     matrix_t calculateRHS_test(const State &state, const Stencils &stencils, double dt) const;
+
+    double calculateDt(double u_max, double v_max);
+
+    double calculateGamma(double u_max, double v_max, double dt);
+
+    void calculateUV(State &next_step, const matrix_t &F, const matrix_t &G, const Stencils &stencils, double dt);
 };
 
 
