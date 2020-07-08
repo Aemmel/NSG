@@ -20,9 +20,9 @@ public:
 
 
 
-    matrix_t applyPBoundaries(const matrix_t &p) const override;
-    matrix_t applyUBoundaries(const matrix_t &u) const override ;
-    matrix_t applyVBoundaries(const matrix_t &v) const override ;
+    void applyPBoundaries(matrix_t &p) const override;
+    void applyUBoundaries(matrix_t &u) const override ;
+    void applyVBoundaries(matrix_t &v) const override ;
 
 };
 
