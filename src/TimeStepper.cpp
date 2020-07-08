@@ -35,7 +35,7 @@ matrix_t TimeStepper::calculateF(const State &state, const Stencils &stencils, d
     }
 
     // apply boundary
-    // TODO
+    boundary_.applyFBoundaries(F, state.u);
 
     return F;
 }
@@ -49,7 +49,7 @@ matrix_t TimeStepper::calculateG(const State &state, const Stencils &stencils, d
     // we will deal with the ghost cells later
     for (index_t i = 1; i < G.size() - 1; i++) {
         for (index_t j = 1; j < G[i].size() - 1; j++) {
-            //The value of the brace which is multiplied with dt
+            // The value of the brace which is multiplied with dt
             // 1/Re * ( d^2v/dx^2 + d^2u/dy^2)
             double dt_brace = 1/Re_ * (stencils.secondDerivF(v, PARAM::X, i, j) + stencils.secondDerivF(v, PARAM::Y, i, j))
                             // - d(uv)/dx
@@ -64,8 +64,8 @@ matrix_t TimeStepper::calculateG(const State &state, const Stencils &stencils, d
         }
     }
 
-    // TODO
-    // boundary
+    // apply boundary
+    boundary_.applyGBoundaries(G, state.v);
 
     return G;
 }
@@ -114,9 +114,14 @@ State TimeStepper::step(const State& curr_step)
     double v_max = SOR::normMAX(curr_step.v);
 
     double dt = calculateDt(u_max, v_max);
+
+    if (dt < 1e-4) {
+        std::cout << "Very small dt, we have u_max=" << u_max << " and v_max=" << v_max << std::endl;
+    }
+
     double gamma = calculateGamma(u_max, v_max, dt); // gamma should be greater equal than RHS
 
-    State next_step = State(curr_step.getCellCountX(), curr_step.getCellCountY(), curr_step.getDX(), curr_step.getDY(), curr_step.getTime());   
+    State next_step = State(curr_step.getCellCountX(), curr_step.getCellCountY(), curr_step.getDX(), curr_step.getDY(), curr_step.getTime() + dt);   
     SOR sor_solver = SOR(boundary_, curr_step.p, curr_step.getDX(), curr_step.getDY(), rel_eps_, SOR::NORM::L2);
     Stencils stencils = Stencils(dx_, dy_, gamma);
 
@@ -186,4 +191,8 @@ void TimeStepper::calculateUV(State &next_step, const matrix_t &F, const matrix_
             next_step.v[i][j] = G[i][j] - dt*stencils.firstDerivF(next_step.p, Stencils::PARAM::Y, i, j);
         }
     }
+
+    // apply boundaries
+    boundary_.applyUBoundaries(next_step.u);
+    boundary_.applyVBoundaries(next_step.v);
 }

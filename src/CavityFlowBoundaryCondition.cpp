@@ -83,5 +83,5 @@ void CavityFlowBoundaryCondition::applyVBoundaries(matrix_t &v) const {
 CavityFlowBoundaryCondition::CavityFlowBoundaryCondition(const Options &options) :
 options_(options)
 {
-    velocity_ = 0;
+    velocity_ = options_.getVelocity();
 }

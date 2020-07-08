@@ -81,7 +81,8 @@ matrix_t SOR::newFieldTest(const matrix_t &RHS, double omega, index_t max_it)
 
 void SOR::newIteration(const matrix_t &RHS, double omega)
 {
-    next_field_ = boundary_.applyPBoundaries(curr_field_);
+    // at this point next_field_ is still equal to the old field
+    boundary_.applyPBoundaries(next_field_);
 
     // remember we don't want the ghost cells
     for (index_t i = 1; i < next_field_.size() - 1; i++) {

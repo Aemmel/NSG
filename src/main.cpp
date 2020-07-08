@@ -17,6 +17,7 @@
 
 void testStencils();
 void testStencilFG();
+void testPDE();
 
 int main()
 {
@@ -29,48 +30,26 @@ int main()
 
         TimeStepper t_step = TimeStepper(boundary, options);
 
-        // fill with ones for start
-        for (index_t i = 0; i < state.getCellCountX(); i++) {
-            for (index_t j = 0; j < state.getCellCountY(); j++) {
-                state.p[i][j] = 0;
-                //state.p[i][j] = test_func(i * options.getDx(), j * options.getDy());
-            }
-        }
-
-        for (index_t i = 2; i < state.getCellCountX() - 2; i++) {
-            for (index_t j = 2; j < state.getCellCountY() - 2; j++) {
-                //state.p[i][j] = 0;
-                //state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy()) + 0.2;
-            }
-        }
-
-        /*for (auto i : state.p) {
-            for (auto j : i) {
-                std::cout << j << " ";
-            }
-            std::cout << std::endl;
-        }*/
-
-        // Dirichlet boundary condition for p(x,y) = sin(x)cos(y)
-
-
-        state = t_step.step(state);
-
-        //TimeStepper stepper(options);
-
-        //Fill with known functions
-        /*state.fillWithFunction(State::GRID::U, [](double y, double x) { return cos(x) * cos(y); });
-        state.fillWithFunction(State::GRID::V, [](double y, double x) { return sin(x) * sin(y); });
-
-        state.fillWithFunction(State::GRID::P, [](double y, double x) { return sin(x) * cos(y); });*/
-
-        // try out stencils with known functions
-        //testStencils();
-        //testStencilFG();
-
         CSVPrinter printer;
 
-        printer.print(state, 0);
+        double last_time = 0;
+
+        // main loop
+        while (state.getTime() < options.getMaxTime()) {
+            state = t_step.step(state);
+            std::cout << "Current Time: " << state.getTime() << std::endl;
+
+            if (int(last_time) != int(state.getTime())) {
+                printer.print(state, state.getTime());
+                std::cout << "PRINTED" << std::endl;
+            }
+
+            last_time = state.getTime();
+        }
+
+        
+
+        printer.print(state, 2);
         //Output the state to files
     }
     catch (const std::exception& e) {
@@ -193,4 +172,36 @@ void testStencilFG()
 
     CSVPrinter printer;
     printer.printMatrix(test_deriv, "test_file");
+}
+
+void testPDE()
+{
+    Options options = Options("data/options.json");
+
+        State state(options, 0.0);
+
+        CavityFlowBoundaryCondition boundary = CavityFlowBoundaryCondition(options);
+
+        TimeStepper t_step = TimeStepper(boundary, options);
+
+        // fill with ones for start
+        for (index_t i = 0; i < state.getCellCountX(); i++) {
+            for (index_t j = 0; j < state.getCellCountY(); j++) {
+                state.p[i][j] = 0;
+                //state.p[i][j] = test_func(i * options.getDx(), j * options.getDy());
+            }
+        }
+
+        for (index_t i = 2; i < state.getCellCountX() - 2; i++) {
+            for (index_t j = 2; j < state.getCellCountY() - 2; j++) {
+                //state.p[i][j] = 0;
+                //state.p[i][j] = sin(i * options.getDx()) * cos(j * options.getDy()) + 0.2;
+            }
+        }
+
+        state = t_step.step(state);
+
+        CSVPrinter printer;
+
+        printer.print(state, 0);
 }

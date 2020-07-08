@@ -41,9 +41,19 @@ Options::Options(const std::string& file_name)
 
     safety_tau_ = j["safety_tau"];
 
+    if (safety_tau_ <= 0 || safety_tau_ > 1) {
+        throw std::runtime_error("saftey tau needs to be element of (0, 1]!");
+    }
+
     omega_ = j["omega"];
 
+    if (omega_ < 0 || omega_ > 2) {
+        throw std::runtime_error("omega needs to be element of [0, 2]!");
+    }
+
     SOR_max_it_ = j["SOR_max_it"];
+
+    velocity_ = j["velocity"];
 
     json_file.close();
 }
@@ -106,4 +116,9 @@ double Options::getOmega() const
 index_t Options::getSORMaxIt() const
 {
     return SOR_max_it_;
+}
+
+double Options::getVelocity() const
+{
+    return velocity_;
 }

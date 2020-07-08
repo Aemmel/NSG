@@ -34,6 +34,9 @@ private:
 
     index_t SOR_max_it_;
 
+    // velocity of the upper boundary in the cavity flow experiment
+    double velocity_;
+
 public:
     Options(const std::string& file_name);
 
@@ -57,6 +60,8 @@ public:
     double getOmega() const;
 
     index_t getSORMaxIt() const;
+
+    double getVelocity() const;
 };
 
 #endif // NSG_OPTIONS_HPP
