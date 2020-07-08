@@ -11,7 +11,7 @@
 #include "Stencils.hpp"
 #include "TimeStepper.hpp"
 #include "CavityFlowBoundaryCondition.hpp"
-#include "AbstractBoundaryCondidtion.hpp"
+#include "AbstractBoundaryCondition.hpp"
 
 #include "TestFunc.hpp"
 

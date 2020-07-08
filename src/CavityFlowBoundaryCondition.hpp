@@ -7,7 +7,7 @@
 
 
 #include "Options.hpp"
-#include "AbstractBoundaryCondidtion.hpp"
+#include "AbstractBoundaryCondition.hpp"
 
 class CavityFlowBoundaryCondition : public AbstractBoundaryCondition {
 

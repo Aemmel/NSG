@@ -1,7 +1,7 @@
 #ifndef HEADER_SOR_HPP
 #define HEADER_SOR_HPP
 
-#include "AbstractBoundaryCondidtion.hpp"
+#include "AbstractBoundaryCondition.hpp"
 #include "Common.hpp"
 
 class SOR

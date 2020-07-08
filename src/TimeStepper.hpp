@@ -9,7 +9,7 @@
 #include "Stencils.hpp"
 #include "State.hpp"
 #include "Options.hpp"
-#include "AbstractBoundaryCondidtion.hpp"
+#include "AbstractBoundaryCondition.hpp"
 
 class TimeStepper {
 private:

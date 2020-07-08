@@ -27,11 +27,11 @@ add_executable(NSG
         src/json.hpp
         src/TimeStepper.cpp
         src/TimeStepper.hpp
-        src/AbstractBoundaryCondidtion.hpp
+        src/AbstractBoundaryCondition.hpp
         src/SOR.hpp
         src/SOR.cpp
         src/CavityFlowBoundaryCondition.cpp
-        src/CavityFlowBoundaryCondition.hpp)
+        src/CavityFlowBoundaryCondition.hpp src/AbstractBoundaryCondition.cpp)
 
 # Try to use OpenMP to use multithreading
 find_package(OpenMP)
