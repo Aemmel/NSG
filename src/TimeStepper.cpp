@@ -133,10 +133,10 @@ State TimeStepper::step(const State& curr_step)
     matrix_t RHS = calculateRHS(curr_step, stencils, F, G, dt);
 
     // test only with p
-    next_step.p = sor_solver.newFieldTest(calculateRHS_test(curr_step, stencils, dt), omega_, SOR_max_it_);
+    //next_step.p = sor_solver.newFieldTest(calculateRHS_test(curr_step, stencils, dt), omega_, SOR_max_it_);
 
     // new pressure
-    //next_step.p = sor_solver.newField(RHS, omega_, SOR_max_it_);
+    next_step.p = sor_solver.newField(RHS, omega_, SOR_max_it_);
 
     // new u and v velocity
     calculateUV(next_step, F, G, stencils, dt);

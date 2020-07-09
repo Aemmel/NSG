@@ -22,9 +22,9 @@ void testPDE();
 int main()
 {
     try {
-        testPDE();
+        //testPDE();
 
-        /*Options options = Options("data/options.json");
+        Options options = Options("data/options.json");
 
         State state(options, 0.0);
 
@@ -41,15 +41,13 @@ int main()
             state = t_step.step(state);
             std::cout << "Current Time: " << state.getTime() << std::endl;
 
-            if (int(last_time) != int(state.getTime())) {
+            if (int(10*last_time) != int(10*state.getTime())) {
                 printer.print(state, state.getTime());
                 std::cout << "PRINTED" << std::endl;
             }
 
             last_time = state.getTime();
-        }*/
-
-
+        }
     }
     catch (const std::exception& e) {
         std::cerr << "UwU. Something went tewwibwy wwong: " << e.what() << std::endl;
@@ -186,8 +184,8 @@ void testPDE()
         // fill with ones for start
         for (index_t i = 0; i < state.getCellCountX(); i++) {
             for (index_t j = 0; j < state.getCellCountY(); j++) {
-                //state.p[i][j] = 0;
-                state.p[i][j] = test_func(i * options.getDx(), j * options.getDy()) + 0.2;
+                state.p[i][j] = 0;
+                //state.p[i][j] = test_func(i * options.getDx(), j * options.getDy()) + 0.2;
             }
         }
 

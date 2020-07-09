@@ -29,6 +29,10 @@ matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
         // calculate residual
         res = calculateRes(next_field_, RHS);
 
+        //if (cnt % 1000 == 0) {
+        //    std::cout << "error: " << normL2(res) / normL2(orig_field_) << " at it=" << cnt << std::endl;
+        //}
+
         cnt++;
     } while(!resBelowError(res) && cnt < max_it);
 
