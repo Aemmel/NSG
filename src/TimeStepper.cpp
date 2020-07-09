@@ -3,6 +3,7 @@
 //
 
 #include "TimeStepper.hpp"
+#include "TestFunc.hpp"
 
 #include <vector>
 #include <iostream>
@@ -100,6 +101,7 @@ matrix_t TimeStepper::calculateRHS_test(const State &state, const Stencils &sten
     for (index_t i = 0; i < RHS.size(); i++) {
         for (index_t j = 0; j < RHS[i].size(); j++) {
             RHS[i][j] = - 2 * state.p[i][j];
+            //RHS[i][j] = test_func(i*state.getDX(), j*state.getDY());
             //RHS[i][j] = 2*(i*dx_ + j*dy_);
             //RHS[i][j] = -state.p[i][j];
         }
@@ -131,10 +133,10 @@ State TimeStepper::step(const State& curr_step)
     matrix_t RHS = calculateRHS(curr_step, stencils, F, G, dt);
 
     // test only with p
-    //next_step.p = sor_solver.newFieldTest(calculateRHS_test(curr_step, stencils, dt), omega_, SOR_max_it_);
+    next_step.p = sor_solver.newFieldTest(calculateRHS_test(curr_step, stencils, dt), omega_, SOR_max_it_);
 
     // new pressure
-    next_step.p = sor_solver.newField(RHS, omega_, SOR_max_it_);
+    //next_step.p = sor_solver.newField(RHS, omega_, SOR_max_it_);
 
     // new u and v velocity
     calculateUV(next_step, F, G, stencils, dt);

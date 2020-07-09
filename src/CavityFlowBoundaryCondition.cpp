@@ -14,7 +14,7 @@ void CavityFlowBoundaryCondition::applyPBoundaries(matrix_t &p) const {
 
     // von Neumann for actual fluid simulation
     // Dirichlet (von_neumann == false) for testing
-    bool von_neumann = true;
+    bool von_neumann = false;
 
     //The manual does not give a proper equation for how to fill the corner ghost cells
     //They are not accessed, so just fill it with its neighbor ghost value
@@ -45,38 +45,38 @@ void CavityFlowBoundaryCondition::applyPBoundaries(matrix_t &p) const {
 }
 
 void CavityFlowBoundaryCondition::applyUBoundaries(matrix_t &u) const {
-    auto width = u[0].size();
-    auto height = u.size();
+    auto width = u.size();
+    auto height = u[0].size();
 
     //Set no slip condition for u
     //We have to iterate until u.size() - 1 because last index is a ghost cell
-    for (index_t j = 1; j < width - 1; j++) {
+    for (index_t j = 1; j < height - 1; j++) {
         u[0][j] = 0;
 
         //Set top row to velocity
-        u[height - 1][j] = velocity_;
+        u[width - 1][j] = velocity_;
     }
 
-    for (index_t i = 1; i < height - 1; i++) {
+    for (index_t i = 1; i < width - 1; i++) {
         u[i][0] = - u[i][1];
-        u[i][width - 1] = u[i][width - 2];
+        u[i][height - 1] = u[i][height - 2];
     }
 }
 
 void CavityFlowBoundaryCondition::applyVBoundaries(matrix_t &v) const {
-    auto height = v.size();
-    auto width = v[0].size();
+    auto width = v.size();
+    auto height = v[0].size();
 
     //Set no slip condition for u
     //We have to iterate until u.size() - 1 because last index is a ghost cell
-    for (index_t i = 1; i < height - 1; i++) {
-        v[i][width] = 0;
-        v[i][width - 1] = 0;
+    for (index_t i = 1; i < width - 1; i++) {
+        v[i][height] = 0;
+        v[i][height - 1] = 0;
     }
 
-    for (index_t j = 1; j < width - 1; j++) {
+    for (index_t j = 1; j < height - 1; j++) {
         v[0][j] = - v[1][j];
-        v[height - 1][j] = - v[height - 2][j];
+        v[width - 1][j] = - v[width - 2][j];
     }
 }
 
