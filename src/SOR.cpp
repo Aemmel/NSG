@@ -11,6 +11,23 @@ boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps
     // mostly to fix the size
     curr_field_ = matrix_t(orig_field); 
     next_field_ = matrix_t(orig_field);
+
+    // only calculate the norm for the original field once since it doesn't change
+    switch (norm) {
+    case NORM::L2:
+        norm_orig_field_ = normL2(orig_field_);
+        break;
+    case NORM::MAX:
+        norm_orig_field_ = normMAX(orig_field_);
+        break;
+    default:
+        throw std::runtime_error("Non-existent norm used!");
+        break;
+    }
+    // don't know. This was in Sarah's code
+    if (norm_orig_field_ < rel_eps_) {
+        norm_orig_field_ = rel_eps_;
+    }
 }
 
 matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
@@ -29,9 +46,16 @@ matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
         // calculate residual
         res = calculateRes(next_field_, RHS);
 
-        //if (cnt % 1000 == 0) {
-        //    std::cout << "error: " << normL2(res) / normL2(orig_field_) << " at it=" << cnt << std::endl;
-        //}
+        // if (cnt % 200000 == 0) {
+        //     //std::cout << "error: " << normL2(res) / normL2(orig_field_) << " at it=" << cnt << std::endl;
+        //     //std::cout << "i=" << cnt << ", ||res||=" << normL2(res) << ", ||p^0||=" << norm_orig_field_ << ", max(p^i)=" << normMAX(next_field_) << std::endl;
+        //     for (auto i : RHS) {
+        //         for (auto j : i) {
+        //             std::cout << j << " ";
+        //         }
+        //         std::cout << std::endl;
+        //     }
+        // }
 
         cnt++;
     } while(!resBelowError(res) && cnt < max_it);
@@ -127,22 +151,19 @@ matrix_t SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS) const
 bool SOR::resBelowError(const matrix_t &res)
 {
     double res_norm;
-    double orig_norm;
 
     switch (norm_) {
     case NORM::L2:
         res_norm = normL2(res);
-        orig_norm = normL2(orig_field_);
         break;
     case NORM::MAX:
         res_norm = normMAX(res);
-        orig_norm = normMAX(orig_field_);
         break;
     default:
         throw std::runtime_error("Non-existent norm used!");
     }
 
-    return res_norm < rel_eps_ * orig_norm;
+    return res_norm < rel_eps_ * norm_orig_field_;
 }
 
 /**
@@ -157,7 +178,7 @@ double SOR::normL2(const matrix_t &mat)
     // remember we don't want the ghost cells
     for (index_t i = 1; i < mat.size() - 1; i++) {
         for (index_t j = 1; j < mat[i].size() - 1; j++) {
-            temp += std::pow(mat[i][j], 2);
+            temp += mat[i][j]*mat[i][j];
         }
     }
 

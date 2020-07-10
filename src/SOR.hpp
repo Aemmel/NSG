@@ -17,6 +17,8 @@ private:
     matrix_t curr_field_;
     matrix_t next_field_;
 
+    double norm_orig_field_;
+
     double dx_;
     double dy_;
     double rel_eps_;

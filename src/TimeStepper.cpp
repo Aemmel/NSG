@@ -121,7 +121,7 @@ State TimeStepper::step(const State& curr_step)
         std::cout << "Very small dt, we have u_max=" << u_max << " and v_max=" << v_max << std::endl;
     }
 
-    double gamma = calculateGamma(u_max, v_max, dt); // gamma should be greater equal than RHS
+    double gamma = calculateGamma(u_max, v_max, dt) + 0.1; // gamma should be greater equal than RHS
 
     State next_step = State(curr_step.getCellCountX(), curr_step.getCellCountY(), curr_step.getDX(), curr_step.getDY(), curr_step.getTime() + dt);   
     SOR sor_solver = SOR(boundary_, curr_step.p, curr_step.getDX(), curr_step.getDY(), rel_eps_, SOR::NORM::L2);

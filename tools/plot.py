@@ -40,13 +40,22 @@ if not sorted(file_names_u) or not sorted(file_names_v) or not sorted(file_names
     print("ERROR: File names aren't sorted!")
     exit()
 
+# p_dat = np.zeros(len(file_names_p))
+# for i in range(len(file_names_p)):
+#     data_p = np.array(pd.read_csv(file_names_p[i], delimiter="\t", header=None))
+
+#     p_dat[i] = data_p[20][20]
+
+# plt.plot(np.arange(0, len(p_dat)), p_dat)
+
+# plt.show()
+# exit()
 
 ################################
 # preliminary work
 fig = plt.figure()
 ax = fig.add_subplot(111)
 #ax_3D = fig.add_subplot(111, projection="3d")
-#ax_3D = Axes3D(fig)
 
 x_array = np.linspace(0, obj["cell_cnt_x"]*obj["dx"], obj["cell_cnt_x"] - 2)
 y_array = np.linspace(0, obj["cell_cnt_y"]*obj["dy"], obj["cell_cnt_y"] - 2)
@@ -103,14 +112,14 @@ def animate_velocity(i):
 #plt.savefig("plots/")
 
 #plot_pressure = [ax_3D.plot_surface(X_mesh, Y_mesh, X_mesh, color="cyan")] # first plot, so it knows what kind of object it is
-ax.collections = [] # clear lines
-ax.patches = [] # clear arrowheads
+# ax.collections = [] # clear lines
+# ax.patches = [] # clear arrowheads
 
 #ani = animation.FuncAnimation(fig, animate_pressure, np.arange(0, len(file_names_p)), fargs=(plot_pressure,), interval=250)
 ani = animation.FuncAnimation(fig, animate_velocity, np.arange(0, len(file_names_u)), interval=250)
 
 #writer_gif = animation.PillowWriter(fps=20)
 
-#ani.save("plots/test.gif", writer="imagemagick")
+#ani.save("plots/test_pressure.mp4", writer="imagemagick")
 
 plt.show()
