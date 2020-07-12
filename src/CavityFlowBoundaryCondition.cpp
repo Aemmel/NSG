@@ -82,7 +82,7 @@ void CavityFlowBoundaryCondition::applyVBoundaries(matrix_t &v) const {
     //Set no slip condition for u
     //We have to iterate until u.size() - 1 because last index is a ghost cell
     for (index_t i = 1; i < width - 1; i++) {
-        v[i][height] = 0;
+        v[i][0] = 0;
         v[i][height - 2] = 0;
     }
 
