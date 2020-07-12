@@ -4,6 +4,7 @@
 #include <functional>
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 SOR::SOR(const AbstractBoundaryCondition &boundary, const matrix_t &orig_field, double dx, double dy, double rel_eps, NORM norm) :
 boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps), norm_(norm)
@@ -11,6 +12,7 @@ boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps
     // mostly to fix the size
     curr_field_ = matrix_t(orig_field); 
     next_field_ = matrix_t(orig_field);
+    res_ = matrix_t(orig_field.size(), std::vector<double>(orig_field[0].size()));
 
     // only calculate the norm for the original field once since it doesn't change
     switch (norm) {
@@ -28,6 +30,9 @@ boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps
     if (norm_orig_field_ < rel_eps_) {
         norm_orig_field_ = rel_eps_;
     }
+
+    dx_squared_ = dx_ * dx_;
+    dy_squared_ = dy_ * dy_;
 }
 
 matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
@@ -44,7 +49,7 @@ matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
         curr_field_ = next_field_;
 
         // calculate residual
-        res = calculateRes(next_field_, RHS);
+        calculateRes(next_field_, RHS);
 
         // if (cnt % 200000 == 0) {
         //     //std::cout << "error: " << normL2(res) / normL2(orig_field_) << " at it=" << cnt << std::endl;
@@ -58,14 +63,14 @@ matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
         // }
 
         cnt++;
-    } while(!resBelowError(res) && cnt < max_it);
+    } while(!resBelowError(res_) && cnt < max_it);
 
     // inform not only how long it took, but also if it converged quickly enough
-    std::cout << "SOR Solver took " << cnt << " iterations";
-    if (cnt == max_it) {
-        std::cout << ". Maximum was reached";
-    }
-    std::cout << std::endl;
+    // std::cout << "SOR Solver took " << cnt << " iterations";
+    // if (cnt == max_it) {
+    //     std::cout << ". Maximum was reached";
+    // }
+    // std::cout << std::endl;
 
     return curr_field_;
 }
@@ -85,7 +90,7 @@ matrix_t SOR::newFieldTest(const matrix_t &RHS, double omega, index_t max_it)
         curr_field_ = next_field_;
 
         // calculate residual
-        res = calculateRes(next_field_, rhs);
+        calculateRes(next_field_, rhs);
 
         // calculate new RHS
         for (index_t i = 0; i < rhs.size(); i++) {
@@ -113,39 +118,41 @@ void SOR::newIteration(const matrix_t &RHS, double omega)
 {
     // at this point next_field_ is still equal to the old field
     boundary_.applyPBoundaries(next_field_);
+    double fac_1 = 1 - omega;
+    double fac_2 = omega / (2.0 * (1.0/(dx_squared_) + 1.0/(dy_squared_)));
 
     // remember we don't want the ghost cells
     for (index_t i = 1; i < next_field_.size() - 1; i++) {
         for (index_t j = 1; j < next_field_[i].size() - 1; j++) {
             // we break the term up into:
-            // (1-w)p_i_j + fac * (temp_x / dx^2 + temp_y / dy^2 - RHS_i_j)
-            double fac = omega / (2.0 * (1.0/(dx_*dx_) + 1.0/(dy_*dy_)));
+            // fac_1*p_i_j + fac_2 * (temp_x / dx^2 + temp_y / dy^2 - RHS_i_j)
+            //double fac = omega / (2.0 * (1.0/(dx_*dx_) + 1.0/(dy_*dy_)));
             double temp_x = curr_field_[i+1][j] + next_field_[i-1][j];
             double temp_y = curr_field_[i][j+1] + next_field_[i][j-1];
 
-            next_field_[i][j] = (1-omega)*curr_field_[i][j] + fac*(temp_x / (dx_ * dx_) + temp_y / (dy_ * dy_) - RHS[i][j]);
+            next_field_[i][j] = fac_1*curr_field_[i][j] + fac_2*(temp_x / dx_squared_ + temp_y / dy_squared_ - RHS[i][j]);
         }
     }
 }
 
-matrix_t SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS) const
+void SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS)
 {
     // we trust the vector sizes are all compatible
-    matrix_t res = matrix_t(new_field.size(), std::vector<double>(new_field[0].size()));
+    //matrix_t res = matrix_t(new_field.size(), std::vector<double>(new_field[0].size()));
 
     // remember we don't want the ghost cells
-    for (index_t i = 1; i < res.size() - 1; i++) {
-        for (index_t j = 1; j < res[i].size() - 1; j++) {
+    for (index_t i = 1; i < res_.size() - 1; i++) {
+        for (index_t j = 1; j < res_.size() - 1; j++) {
             // p_(i+1)_j - 2p_i_j + p_(i-1)_j
             double temp_x = new_field[i+1][j] - 2*new_field[i][j] + new_field[i-1][j];
             // p_i_(j+1) - 2p_i_j + p_i_(j-1)
             double temp_y = new_field[i][j+1] - 2*new_field[i][j] + new_field[i][j-1];
 
-            res[i][j] = temp_x / (dx_*dx_) + temp_y / (dy_*dy_) - RHS[i][j];
+            res_[i][j] = temp_x / dx_squared_ + temp_y / dy_squared_ - RHS[i][j];
         }
     }
 
-    return res;
+    //return res;
 }
 
 bool SOR::resBelowError(const matrix_t &res)

@@ -23,6 +23,12 @@ private:
     double dy_;
     double rel_eps_;
 
+    // we often need this value, so calculate it
+    double dx_squared_;
+    double dy_squared_;
+
+    matrix_t res_;
+
     NORM norm_;
 
 public:
@@ -37,7 +43,7 @@ private:
     //matrix_t newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega);
     void newIteration(const matrix_t &RHS, double omega);
 
-    matrix_t calculateRes(const matrix_t &new_field, const matrix_t &RHS) const;
+    void calculateRes(const matrix_t &new_field, const matrix_t &RHS);
 
     bool resBelowError(const matrix_t &res);
 };

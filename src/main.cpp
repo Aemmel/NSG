@@ -39,15 +39,17 @@ int main()
         // main loop
         while (state.getTime() < options.getMaxTime()) {
             state = t_step.step(state);
-            std::cout << "Current Time: " << state.getTime() << std::endl;
+            // std::cout << "Current Time: " << state.getTime() << std::endl;
 
-            if (int(10*last_time) != int(10*state.getTime())) {
-                printer.print(state, state.getTime());
-                std::cout << "PRINTED" << std::endl;
-            }
+            // if (int(10*last_time) != int(10*state.getTime())) {
+            //     printer.print(state, state.getTime());
+            //     std::cout << "PRINTED" << std::endl;
+            // }
 
-            last_time = state.getTime();
+            //last_time = state.getTime();
         }
+
+        printer.print(state, state.getTime());
     }
     catch (const std::exception& e) {
         std::cerr << "UwU. Something went tewwibwy wwong: " << e.what() << std::endl;
