@@ -37,10 +37,22 @@ file_names_v = [f for f in file_names if "nsg_v" in f]
 file_names_p = [f for f in file_names if "nsg_p" in f]
 time_steps = [float(re.search(r"nsg_p_((\d|\.)+).dat", f).group(1)) for f in file_names_p]
 
-# should be sorted, but better to check
-if not sorted(file_names_u) or not sorted(file_names_v) or not sorted(file_names_p) or not sorted(time_steps):
-    print("ERROR: File names aren't sorted!")
-    exit()
+def atoi(text):
+    return int(text) if text.isdigit() else text
+
+def natural_keys(text):
+    '''
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    '''
+    return [ atoi(c) for c in re.split(r'(\d+)', text) ]
+
+# sort them
+file_names_u.sort(key=natural_keys)
+file_names_v.sort(key=natural_keys)
+file_names_p.sort(key=natural_keys)
+time_steps.sort()
 
 ################################
 # preliminary work
@@ -73,28 +85,30 @@ def animate_velocity(i):
 
 def animate_both(i):
     ax.set_title("t=" + "{:.4f}".format(time_steps[i]))
+    if i % 10 == 0:
+        print("worked: " + str(time_steps[i]))
     return animate_pressure(i), animate_velocity(i)
 
 ################################
 # variables to control what to plot
 
 # options are "none", "p", "v", "pv"
-ANIMATE_WHAT = "pv"
+ANIMATE_WHAT = "none"
 # slow down factor for animation (1 would be print_every from options.json)
 ANIMATE_SLOW_FACTOR = 6
 # title of MP4, if p, v or pv is added is done automatically
-ANIMATE_TITLE = "Re=1e1"
+ANIMATE_TITLE = "Re=1e2"
 
 # plot velocity. Array of time values to plot (it takes the closest values)
 # if it's -1, then don't plot
-PLOT_FLUID = [ 1.0, 2.0 ]
+PLOT_FLUID = [ 2, 5, 6, 7, 8, 9, 9.8 ]
 # plot velocity or pressure or both for each PLOT_FLUID
 PLOT_VELOCITY = True
 PLOT_PRESSURE = True
 # "streamplot (and/or) heat map: PLOT_TITLE, t=..."
 PLOT_TITLE = "$Re=10^1$"
 # plot save file (without timestep) or if pressure or velocity is plotted
-PLOT_SAVE_NAME = "Re=1e1"
+PLOT_SAVE_NAME = "ReTest_Re=1e1"
 # save the plots?
 PLOT_SAVE = False
 
