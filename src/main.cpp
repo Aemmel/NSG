@@ -28,13 +28,6 @@ int main()
 
         State state(options, 0.0);
 
-        // fill p with value 2
-        for (index_t i=0; i < state.getCellCountX(); i++) {
-            for (index_t j=0; j < state.getCellCountY(); j++) {
-                state.p[i][j] = options.getInitialValue();
-            }
-        }
-
         CavityFlowBoundaryCondition boundary = CavityFlowBoundaryCondition(options);
 
         TimeStepper t_step = TimeStepper(boundary, options);

@@ -55,7 +55,9 @@ public:
      * @param dx The distance between two cells in x direction
      * @param dy The distance used between two cells in y direction
      */
-    State(index_t width, index_t height, double dx, double dy, double t);
+    State(index_t width, index_t height, double dx, double dy, double t, double p_init);
+
+    State(index_t width, index_t height, double dx, double dy, double t): State(width, height, dx, dy, t, 0) {};
 
     State(const Options &options, double t);
 
