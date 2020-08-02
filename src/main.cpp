@@ -31,7 +31,7 @@ int main()
         // fill p with value 2
         for (index_t i=0; i < state.getCellCountX(); i++) {
             for (index_t j=0; j < state.getCellCountY(); j++) {
-                state.p[i][j] = 3;
+                state.p[i][j] = options.getInitialValue();
             }
         }
 

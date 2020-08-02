@@ -3,14 +3,15 @@
     "cell_cnt_y": 100,
     "dx": 0.01,
     "dy": 0.01,
-    "reynold": 100,
+    "reynold": 10000,
     "rel_epsilon": 1e-5,
-    "max_time": 10,
+    "max_time": 30,
     "force_x": 0,
     "force_y": 0.0,
     "safety_tau": 0.5,
     "omega": 1.9,
     "SOR_max_it": 450000,
     "velocity": 1,
-    "print_every": 0.01
+    "print_every": 0.01,
+    "initial_value": 3
 }

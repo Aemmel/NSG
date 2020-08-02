@@ -38,6 +38,9 @@ private:
     double velocity_;
 
     double print_every_;
+
+    // initial pressure value
+    double initial_value_;
 public:
     Options(const std::string& file_name);
 
@@ -65,6 +68,8 @@ public:
     double getVelocity() const;
 
     double getPrintEvery() const;
+
+    double getInitialValue() const;
 };
 
 #endif // NSG_OPTIONS_HPP

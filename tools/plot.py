@@ -97,7 +97,7 @@ ANIMATE_WHAT = "pv"
 # slow down factor for animation (1 would be print_every from options.json)
 ANIMATE_SLOW_FACTOR = 6
 # title of MP4, if p, v or pv is added is done automatically
-ANIMATE_TITLE = "Re=1e3"
+ANIMATE_TITLE = "Re=1e4"
 
 # plot velocity. Array of time values to plot (it takes the closest values)
 # if it's -1, then don't plot
@@ -106,9 +106,9 @@ PLOT_FLUID = [  ]
 PLOT_VELOCITY = True
 PLOT_PRESSURE = True
 # "streamplot (and/or) heat map: PLOT_TITLE, t=..."
-PLOT_TITLE = "$Re=10^3$"
+PLOT_TITLE = "$Re=10^4$"
 # plot save file (without timestep) or if pressure or velocity is plotted
-PLOT_SAVE_NAME = "ReTest_Re=1e3"
+PLOT_SAVE_NAME = "ReTest_Re=1e4"
 # save the plots?
 PLOT_SAVE = False
 
@@ -147,7 +147,7 @@ if ANIMATE_WHAT != "none":
     ani = animation.FuncAnimation(fig, animation_func, np.arange(0, len(file_names_u)), interval=fps)
     ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
 
-if max(PLOT_FLUID) > max(time_steps):
+if len(PLOT_FLUID) > 0 and max(PLOT_FLUID) > max(time_steps):
     print("ERROR: PLOT_FLUI can't contain values larger than " + str(max(time_steps)))
     exit()
 

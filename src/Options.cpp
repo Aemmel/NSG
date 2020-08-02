@@ -57,6 +57,8 @@ Options::Options(const std::string& file_name)
 
     print_every_ = j["print_every"];
 
+    initial_value_ = j["initial_value"];
+
     json_file.close();
 }
 
@@ -128,4 +130,9 @@ double Options::getVelocity() const
 double Options::getPrintEvery() const
 {
     return print_every_;
+}
+
+double Options::getInitialValue() const
+{
+    return initial_value_;
 }
