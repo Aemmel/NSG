@@ -40,7 +40,6 @@ public:
     static double normL2(const matrix_t &mat);
     static double normMAX(const matrix_t &mat);
 private:
-    //matrix_t newIteration(const matrix_t &curr_field, const matrix_t &RHS, double omega);
     void newIteration(const matrix_t &RHS, double omega);
 
     void calculateRes(const matrix_t &new_field, const matrix_t &RHS);

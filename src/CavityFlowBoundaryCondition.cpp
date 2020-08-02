@@ -28,6 +28,8 @@ void CavityFlowBoundaryCondition::applyPBoundaries(matrix_t &p) const {
         else {
             p[i][0] = test_func(i*options_.getDx(), 0);
             p[i][height-1] = test_func(i*options_.getDx(), (height-1)*options_.getDy());
+            //p[i][1] = test_func(i*options_.getDx(), 1*options_.getDy());
+            //p[i][height-2] = test_func(i*options_.getDx(), (height-2)*options_.getDy());
         }
     }
 
@@ -40,6 +42,8 @@ void CavityFlowBoundaryCondition::applyPBoundaries(matrix_t &p) const {
         else {
             p[0][j] = test_func(0, j*options_.getDy());
             p[width - 1][j] = test_func((width - 1) * options_.getDx(), j*options_.getDy());
+            //p[1][j] = test_func(options_.getDx(), j*options_.getDy());
+            //p[width - 2][j] = test_func((width - 2) * options_.getDx(), j*options_.getDy());
         }
     }
 }

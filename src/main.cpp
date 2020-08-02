@@ -22,11 +22,18 @@ void testPDE();
 int main()
 {
     try {
-        //testPDE();
+        // testPDE();
 
         Options options = Options("data/options.json");
 
         State state(options, 0.0);
+
+        // fill p with value 2
+        for (index_t i=0; i < state.getCellCountX(); i++) {
+            for (index_t j=0; j < state.getCellCountY(); j++) {
+                state.p[i][j] = 3;
+            }
+        }
 
         CavityFlowBoundaryCondition boundary = CavityFlowBoundaryCondition(options);
 
@@ -35,18 +42,29 @@ int main()
         CSVPrinter printer;
 
         double last_time = 0;
+        double print_every = options.getPrintEvery();
+        double elapsed_since_print = 0;
 
         // main loop
         while (state.getTime() < options.getMaxTime()) {
             state = t_step.step(state);
-            // std::cout << "Current Time: " << state.getTime() << std::endl;
+            std::cout << "Current Time: " << state.getTime() << std::endl;
 
             // if (int(10*last_time) != int(10*state.getTime())) {
             //     printer.print(state, state.getTime());
             //     std::cout << "PRINTED" << std::endl;
             // }
 
-            //last_time = state.getTime();
+            if (elapsed_since_print >= print_every) {
+                printer.print(state, state.getTime());
+                std::cout << "PRINTED" << std::endl;
+                elapsed_since_print = 0;
+            }
+            else {
+                elapsed_since_print += state.getTime() - last_time;
+            }
+
+            last_time = state.getTime();
         }
 
         printer.print(state, state.getTime());
@@ -178,6 +196,7 @@ void testPDE()
     Options options = Options("data/options.json");
 
         State state(options, 0.0);
+        auto analytical = state.p;
 
         CavityFlowBoundaryCondition boundary = CavityFlowBoundaryCondition(options);
 
@@ -186,8 +205,9 @@ void testPDE()
         // fill with ones for start
         for (index_t i = 0; i < state.getCellCountX(); i++) {
             for (index_t j = 0; j < state.getCellCountY(); j++) {
-                state.p[i][j] = 0;
-                //state.p[i][j] = test_func(i * options.getDx(), j * options.getDy()) + 0.2;
+                state.p[i][j] = -1;
+                //state.p[i][j] = test_func(i * options.getDx(), j * options.getDy());
+                analytical[i][j] = test_func(i * options.getDx(), j * options.getDy());
             }
         }
 
@@ -199,6 +219,15 @@ void testPDE()
         }
 
         state = t_step.step(state);
+
+        auto difference = state.p;
+        for (index_t i = 0; i < difference.size(); i++) {
+            for (index_t j = 0; j < difference[0].size(); j++) {
+                difference[i][j] = analytical[i][j] - state.p[i][j];
+            }
+        }
+
+        std::cout << "Difference Norm=" << SOR::normL2(difference) << std::endl;
 
         CSVPrinter printer;
 

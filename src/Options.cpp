@@ -55,6 +55,8 @@ Options::Options(const std::string& file_name)
 
     velocity_ = j["velocity"];
 
+    print_every_ = j["print_every"];
+
     json_file.close();
 }
 
@@ -121,4 +123,9 @@ index_t Options::getSORMaxIt() const
 double Options::getVelocity() const
 {
     return velocity_;
+}
+
+double Options::getPrintEvery() const
+{
+    return print_every_;
 }

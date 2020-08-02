@@ -8,6 +8,7 @@ from matplotlib import rcParams
 import json
 from os import listdir
 from os.path import isfile, join
+import re
 
 # configure pyplot
 plt.rc("text", usetex=True)
@@ -34,27 +35,17 @@ file_names = [join("out", f) for f in listdir("out") if isfile(join("out", f))] 
 file_names_u = [f for f in file_names if "nsg_u" in f]
 file_names_v = [f for f in file_names if "nsg_v" in f]
 file_names_p = [f for f in file_names if "nsg_p" in f]
+time_steps = [float(re.search(r"nsg_p_((\d|\.)+).dat", f).group(1)) for f in file_names_p]
 
 # should be sorted, but better to check
-if not sorted(file_names_u) or not sorted(file_names_v) or not sorted(file_names_p):
+if not sorted(file_names_u) or not sorted(file_names_v) or not sorted(file_names_p) or not sorted(time_steps):
     print("ERROR: File names aren't sorted!")
     exit()
 
-# p_dat = np.zeros(len(file_names_p))
-# for i in range(len(file_names_p)):
-#     data_p = np.array(pd.read_csv(file_names_p[i], delimiter="\t", header=None))
-
-#     p_dat[i] = data_p[20][20]
-
-# plt.plot(np.arange(0, len(p_dat)), p_dat)
-
-# plt.show()
-# exit()
-
 ################################
 # preliminary work
-fig = plt.figure()
-ax = fig.add_subplot(111)
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
 #ax_3D = fig.add_subplot(111, projection="3d")
 
 x_array = np.linspace(0, obj["cell_cnt_x"]*obj["dx"], obj["cell_cnt_x"] - 2)
@@ -62,16 +53,13 @@ y_array = np.linspace(0, obj["cell_cnt_y"]*obj["dy"], obj["cell_cnt_y"] - 2)
 
 X_mesh, Y_mesh = np.meshgrid(x_array, y_array)
 
-
 ################################
 # functions for animating
-def animate_pressure(i, plot):
+def animate_pressure(i):
     data_p = np.array(pd.read_csv(file_names_p[i], delimiter="\t", header=None))
 
-    plot[0].remove()
-    plot[0] = ax_3D.plot_surface(X_mesh, Y_mesh, data_p, color="cyan")
-
-    return plot
+    im.set_array(data_p)
+    return [im]
 
 def animate_velocity(i):
     data_u = np.array(pd.read_csv(file_names_u[i], delimiter="\t", header=None))
@@ -80,46 +68,105 @@ def animate_velocity(i):
     ax.collections = [] # clear lines
     ax.patches = [] # clear arrowheads
 
-    stream = ax.streamplot(X_mesh, Y_mesh, data_u, data_v, density=2, color="blue")
-    return stream
+    stream = ax.streamplot(X_mesh, Y_mesh, data_u, data_v, density=1.2, color="blue")
+    return [stream]
+
+def animate_both(i):
+    return animate_pressure(i), animate_velocity(i)
 
 ################################
-# read in data
-#data_u = np.array(pd.read_csv("out/nsg_u_3.803066.dat", delimiter="\t", header=None))
-#data_v = np.array(pd.read_csv("out/nsg_v_3.803066.dat", delimiter="\t", header=None))
-#data_p = np.array(pd.read_csv("out/nsg_p_3.201932.dat", delimiter="\t", header=None))
+# variables to control what to plot
 
-#fig, ax = plt.subplots()
+# options are "none", "p", "v", "pv"
+ANIMATE_WHAT = "none"
+# slow down factor for animation (1 would be print_every from options.json)
+ANIMATE_SLOW_FACTOR = 2
+# title of MP4, if p, v or pv is added is done automatically
+ANIMATE_TITLE = ""
 
-# quiver (vector-field)
-#q = ax.quiver(X, Y, data_u, data_v, units="width")
+# plot velocity. Array of time values to plot (it takes the closest values)
+# if it's -1, then don't plot
+PLOT_FLUID = [ 1.0, 2.0 ]
+# plot velocity or pressure or both for each PLOT_FLUID
+PLOT_VELOCITY = True
+PLOT_PRESSURE = True
+# "streamplot (and/or) heat map: PLOT_TITLE, t=..."
+PLOT_TITLE = ""
+# plot save file (without timestep) or if pressure or velocity is plotted
+PLOT_SAVE_NAME = ""
+# save the plots?
+PLOT_SAVE = True
 
-# streamplot (integralcurve)
-#ax.streamplot(X, Y, data_u, data_v, density=2)
+################################
+# plot regarding to variables above
+animation_func = None
+if ANIMATE_WHAT == "p":
+    animation_func = animate_pressure
+    ANIMATE_TITLE += "_p"
+elif ANIMATE_WHAT == "v":
+    animation_func = animate_velocity
+    ANIMATE_TITLE += "_v"
+elif ANIMATE_WHAT == "pv":
+    animation_func = animate_both
+    ANIMATE_TITLE += "_pv"
 
-#fig = plt.figure()
-#ax = fig.add_subplot(111, projection="3d")
+if ANIMATE_WHAT != "none":
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    im = plt.imshow(np.array(pd.read_csv(file_names_p[0], delimiter="\t", header=None)), animated=True, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="viridis")
 
-#ax.plot_surface(X, Y, data_p)
-#Z = np.sin(4*X)*np.cos(4*Y)
-#Z = np.sin(X+Y)
-#Z = X*X*Y + Y*Y*X + X*Y
-#Z = np.sin(X)
-#ax.plot_wireframe(X, Y, Z, color="red", rcount=10, ccount=10)
+    fps = obj["print_every"]*1000 * ANIMATE_SLOW_FACTOR # stored in s, convert to ms and slow down
 
-#plt.legend(loc="best")
+    ani = animation.FuncAnimation(fig, animation_func, np.arange(0, len(file_names_u)), interval=fps)
+    ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
 
-#plt.savefig("plots/")
+for t in PLOT_FLUID:
+    closest_time_step = 0
+    # technically not closest but ceiling... but I don't care
+    for i in range(len(time_steps)):
+        if time_steps[i] >= t:
+            closest_time_step = i
+            break
 
-#plot_pressure = [ax_3D.plot_surface(X_mesh, Y_mesh, X_mesh, color="cyan")] # first plot, so it knows what kind of object it is
-# ax.collections = [] # clear lines
-# ax.patches = [] # clear arrowheads
+    data_u = np.array(pd.read_csv(file_names_u[closest_time_step], delimiter="\t", header=None))
+    data_v = np.array(pd.read_csv(file_names_v[closest_time_step], delimiter="\t", header=None))
+    data_p = np.array(pd.read_csv(file_names_p[closest_time_step], delimiter="\t", header=None))
 
-#ani = animation.FuncAnimation(fig, animate_pressure, np.arange(0, len(file_names_p)), fargs=(plot_pressure,), interval=250)
-ani = animation.FuncAnimation(fig, animate_velocity, np.arange(0, len(file_names_u)), interval=250)
+    # plot it
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    if PLOT_VELOCITY == True:
+        ax.streamplot(X_mesh, Y_mesh, data_u, data_v, density=1.5, color="blue")
+    if PLOT_PRESSURE == True:
+        im = ax.imshow(data_p, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="viridis")
+        fig.colorbar(im)
 
-#writer_gif = animation.PillowWriter(fps=20)
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
 
-#ani.save("plots/test_pressure.mp4", writer="imagemagick")
+    title_plot_type = ""
+    if PLOT_VELOCITY == True:
+        title_plot_type += "streamplot"
+    if PLOT_VELOCITY == True and PLOT_PRESSURE == True:
+        title_plot_type += " and "
+    if PLOT_PRESSURE == True:
+        title_plot_type += "heat map"
+    if len(PLOT_TITLE) > 0:
+        title_plot_type += ": "
+    ax.set_title(title_plot_type + PLOT_TITLE + ", t=" + str(time_steps[closest_time_step]))
+    setup_ax(ax)
+    
+    if PLOT_SAVE == True:
+        plot_type = "_"
+        if PLOT_PRESSURE == True:
+            plot_type += "p"
+        if PLOT_VELOCITY == True:
+            plot_type += "v"
+        plt.savefig("plots/" + PLOT_SAVE_NAME + "_t=" + str(time_steps[closest_time_step]) + plot_type + ".pdf")
 
-plt.show()
+    plt.show()
+
+
+#plt.imshow(np.array(pd.read_csv(file_names_p[5], delimiter="\t", header=None)), cmap="Greys", extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]))
+
+#plt.show()

@@ -1,15 +1,16 @@
 {
-    "cell_cnt_x": 150,
-    "cell_cnt_y": 150,
+    "cell_cnt_x": 100,
+    "cell_cnt_y": 100,
     "dx": 0.01,
     "dy": 0.01,
-    "reynold": 1000,
-    "rel_epsilon": 1e-4,
-    "max_time": 0.1,
-    "force_x": 0.0,
+    "reynold": 100,
+    "rel_epsilon": 1e-5,
+    "max_time": 3,
+    "force_x": -0.5,
     "force_y": 0.0,
     "safety_tau": 0.5,
-    "omega": 1.7,
-    "SOR_max_it": 1e6,
-    "velocity": 1
+    "omega": 1.9,
+    "SOR_max_it": 450000,
+    "velocity": 1,
+    "print_every": 0.033333
 }

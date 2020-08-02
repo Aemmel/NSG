@@ -37,8 +37,6 @@ boundary_(boundary), orig_field_(orig_field), dx_(dx), dy_(dy), rel_eps_(rel_eps
 
 matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
 {
-    matrix_t res;
-
     index_t cnt = 0;
 
     // main loop to calculte the new field
@@ -51,33 +49,21 @@ matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
         // calculate residual
         calculateRes(next_field_, RHS);
 
-        // if (cnt % 200000 == 0) {
-        //     //std::cout << "error: " << normL2(res) / normL2(orig_field_) << " at it=" << cnt << std::endl;
-        //     //std::cout << "i=" << cnt << ", ||res||=" << normL2(res) << ", ||p^0||=" << norm_orig_field_ << ", max(p^i)=" << normMAX(next_field_) << std::endl;
-        //     for (auto i : RHS) {
-        //         for (auto j : i) {
-        //             std::cout << j << " ";
-        //         }
-        //         std::cout << std::endl;
-        //     }
-        // }
-
         cnt++;
     } while(!resBelowError(res_) && cnt < max_it);
 
     // inform not only how long it took, but also if it converged quickly enough
-    // std::cout << "SOR Solver took " << cnt << " iterations";
-    // if (cnt == max_it) {
-    //     std::cout << ". Maximum was reached";
-    // }
-    // std::cout << std::endl;
+    std::cout << "SOR Solver took " << cnt << " iterations";
+    if (cnt == max_it) {
+        std::cout << ". Maximum was reached";
+    }
+    std::cout << std::endl;
 
     return curr_field_;
 }
 
 matrix_t SOR::newFieldTest(const matrix_t &RHS, double omega, index_t max_it)
 {
-    matrix_t res;
     matrix_t rhs = matrix_t(RHS);
 
     index_t cnt = 0;
@@ -100,9 +86,9 @@ matrix_t SOR::newFieldTest(const matrix_t &RHS, double omega, index_t max_it)
                 //rhs[i][j] = test_func(i*dx_, j*dy_);
             }
         }
-
+        
         cnt++;
-    } while(!resBelowError(res) && cnt < max_it);
+    } while(!resBelowError(res_) && cnt < max_it);
 
     // inform not only how long it took, but also if it converged quickly enough
     std::cout << "SOR Solver took " << cnt << " iterations";
@@ -126,7 +112,6 @@ void SOR::newIteration(const matrix_t &RHS, double omega)
         for (index_t j = 1; j < next_field_[i].size() - 1; j++) {
             // we break the term up into:
             // fac_1*p_i_j + fac_2 * (temp_x / dx^2 + temp_y / dy^2 - RHS_i_j)
-            //double fac = omega / (2.0 * (1.0/(dx_*dx_) + 1.0/(dy_*dy_)));
             double temp_x = curr_field_[i+1][j] + next_field_[i-1][j];
             double temp_y = curr_field_[i][j+1] + next_field_[i][j-1];
 
@@ -137,9 +122,6 @@ void SOR::newIteration(const matrix_t &RHS, double omega)
 
 void SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS)
 {
-    // we trust the vector sizes are all compatible
-    //matrix_t res = matrix_t(new_field.size(), std::vector<double>(new_field[0].size()));
-
     // remember we don't want the ghost cells
     for (index_t i = 1; i < res_.size() - 1; i++) {
         for (index_t j = 1; j < res_.size() - 1; j++) {
@@ -151,8 +133,6 @@ void SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS)
             res_[i][j] = temp_x / dx_squared_ + temp_y / dy_squared_ - RHS[i][j];
         }
     }
-
-    //return res;
 }
 
 bool SOR::resBelowError(const matrix_t &res)
