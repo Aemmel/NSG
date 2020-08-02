@@ -72,17 +72,18 @@ def animate_velocity(i):
     return [stream]
 
 def animate_both(i):
+    ax.set_title("t=" + "{:.4f}".format(time_steps[i]))
     return animate_pressure(i), animate_velocity(i)
 
 ################################
 # variables to control what to plot
 
 # options are "none", "p", "v", "pv"
-ANIMATE_WHAT = "none"
+ANIMATE_WHAT = "pv"
 # slow down factor for animation (1 would be print_every from options.json)
-ANIMATE_SLOW_FACTOR = 2
+ANIMATE_SLOW_FACTOR = 6
 # title of MP4, if p, v or pv is added is done automatically
-ANIMATE_TITLE = ""
+ANIMATE_TITLE = "Re=1e1"
 
 # plot velocity. Array of time values to plot (it takes the closest values)
 # if it's -1, then don't plot
@@ -91,11 +92,19 @@ PLOT_FLUID = [ 1.0, 2.0 ]
 PLOT_VELOCITY = True
 PLOT_PRESSURE = True
 # "streamplot (and/or) heat map: PLOT_TITLE, t=..."
-PLOT_TITLE = ""
+PLOT_TITLE = "$Re=10^1$"
 # plot save file (without timestep) or if pressure or velocity is plotted
-PLOT_SAVE_NAME = ""
+PLOT_SAVE_NAME = "Re=1e1"
 # save the plots?
-PLOT_SAVE = True
+PLOT_SAVE = False
+
+# say what was done
+print("\tAnimate " + ANIMATE_WHAT + "\n \
+    \tSlowness-Factor=" + str(ANIMATE_SLOW_FACTOR) + "\n \
+    \tPlot Fluid for time steps: " + str(PLOT_FLUID) + "\n \
+    \tStreamplot for velocity? " + str(PLOT_VELOCITY) + "\n \
+    \tHeat map for pressure? " + str(PLOT_PRESSURE) + "\n \
+    \tSave the plot? " + str(PLOT_SAVE))
 
 ################################
 # plot regarding to variables above
@@ -116,6 +125,9 @@ if ANIMATE_WHAT != "none":
     im = plt.imshow(np.array(pd.read_csv(file_names_p[0], delimiter="\t", header=None)), animated=True, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="viridis")
 
     fps = obj["print_every"]*1000 * ANIMATE_SLOW_FACTOR # stored in s, convert to ms and slow down
+
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
 
     ani = animation.FuncAnimation(fig, animation_func, np.arange(0, len(file_names_u)), interval=fps)
     ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
@@ -165,8 +177,3 @@ for t in PLOT_FLUID:
         plt.savefig("plots/" + PLOT_SAVE_NAME + "_t=" + str(time_steps[closest_time_step]) + plot_type + ".pdf")
 
     plt.show()
-
-
-#plt.imshow(np.array(pd.read_csv(file_names_p[5], delimiter="\t", header=None)), cmap="Greys", extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]))
-
-#plt.show()
