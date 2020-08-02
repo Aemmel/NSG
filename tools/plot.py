@@ -93,22 +93,22 @@ def animate_both(i):
 # variables to control what to plot
 
 # options are "none", "p", "v", "pv"
-ANIMATE_WHAT = "none"
+ANIMATE_WHAT = "pv"
 # slow down factor for animation (1 would be print_every from options.json)
 ANIMATE_SLOW_FACTOR = 6
 # title of MP4, if p, v or pv is added is done automatically
-ANIMATE_TITLE = "Re=1e2"
+ANIMATE_TITLE = "Re=1e3"
 
 # plot velocity. Array of time values to plot (it takes the closest values)
 # if it's -1, then don't plot
-PLOT_FLUID = [ 2, 5, 6, 7, 8, 9, 9.8 ]
+PLOT_FLUID = [  ]
 # plot velocity or pressure or both for each PLOT_FLUID
 PLOT_VELOCITY = True
 PLOT_PRESSURE = True
 # "streamplot (and/or) heat map: PLOT_TITLE, t=..."
-PLOT_TITLE = "$Re=10^1$"
+PLOT_TITLE = "$Re=10^3$"
 # plot save file (without timestep) or if pressure or velocity is plotted
-PLOT_SAVE_NAME = "ReTest_Re=1e1"
+PLOT_SAVE_NAME = "ReTest_Re=1e3"
 # save the plots?
 PLOT_SAVE = False
 
@@ -136,15 +136,20 @@ elif ANIMATE_WHAT == "pv":
 if ANIMATE_WHAT != "none":
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    im = plt.imshow(np.array(pd.read_csv(file_names_p[0], delimiter="\t", header=None)), animated=True, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="viridis")
+    im = plt.imshow(np.array(pd.read_csv(file_names_p[0], delimiter="\t", header=None)), animated=True, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="Greens")
 
     fps = obj["print_every"]*1000 * ANIMATE_SLOW_FACTOR # stored in s, convert to ms and slow down
 
+    fig.colorbar(im)
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
 
     ani = animation.FuncAnimation(fig, animation_func, np.arange(0, len(file_names_u)), interval=fps)
     ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
+
+if max(PLOT_FLUID) > max(time_steps):
+    print("ERROR: PLOT_FLUI can't contain values larger than " + str(max(time_steps)))
+    exit()
 
 for t in PLOT_FLUID:
     closest_time_step = 0
@@ -164,7 +169,7 @@ for t in PLOT_FLUID:
     if PLOT_VELOCITY == True:
         ax.streamplot(X_mesh, Y_mesh, data_u, data_v, density=1.5, color="blue")
     if PLOT_PRESSURE == True:
-        im = ax.imshow(data_p, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="viridis")
+        im = ax.imshow(data_p, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="Greens")
         fig.colorbar(im)
 
     ax.set_xlabel("X")
