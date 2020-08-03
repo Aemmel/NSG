@@ -41,7 +41,7 @@ void CSVPrinter::printVector(std::ofstream& stream, const matrix_t& array)
     index_t width = array.size() - 1;
     for (index_t j = 1; j < height; j++) {
         for (index_t i = 1; i < width; i++) {
-            delim = (i < height - 1) ? '\t' : ' '; // use tab unless we're in the last column, then use harmless space
+            delim = (i < width - 1) ? '\t' : ' '; // use tab unless we're in the last column, then use harmless space
 
             stream << array[i][j] << delim;
         }
