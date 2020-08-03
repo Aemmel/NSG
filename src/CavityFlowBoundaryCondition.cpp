@@ -71,6 +71,7 @@ void CavityFlowBoundaryCondition::applyUBoundaries(matrix_t &u) const {
     for (index_t i = 1; i < width - 1; i++) {
         u[i][0] = - u[i][1];
         u[i][height - 1] = velocity_;
+        u[i][height - 2] = u[i][height - 1];
     }
 
     for (index_t j = 1; j < height - 1; j++) {
