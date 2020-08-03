@@ -11,9 +11,9 @@ from os.path import isfile, join
 import re
 
 # configure pyplot
-plt.rc("text", usetex=True)
+#plt.rc("text", usetex=False)
 plt.rc("font", family="serif")
-rcParams["animation.convert_path"] = r"C:/Program Files/ImageMagick-7.0.8-Q16/magick.exe"
+# rcParams["animation.convert_path"] = r"C:/Program Files/ImageMagick-7.0.8-Q16/magick.exe"
 
 def setup_ax(ax):
     ax.tick_params(direction="in")          # ticks inside
@@ -95,22 +95,22 @@ def animate_both(i):
 # options are "none", "p", "v", "pv"
 ANIMATE_WHAT = "pv"
 # slow down factor for animation (1 would be print_every from options.json)
-ANIMATE_SLOW_FACTOR = 6
+ANIMATE_SLOW_FACTOR = 60
 # title of MP4, if p, v or pv is added is done automatically
-ANIMATE_TITLE = "Re=1e4"
+ANIMATE_TITLE = "50x100_Re=1e3"
 
 # plot velocity. Array of time values to plot (it takes the closest values)
 # if it's -1, then don't plot
-PLOT_FLUID = [  ]
+PLOT_FLUID = [ 0.025, 1.0, 3.0, 10.0, 18.0 ]
 # plot velocity or pressure or both for each PLOT_FLUID
 PLOT_VELOCITY = True
 PLOT_PRESSURE = True
 # "streamplot (and/or) heat map: PLOT_TITLE, t=..."
-PLOT_TITLE = "$Re=10^4$"
+PLOT_TITLE = "$Re=10^3$ (50x100)"
 # plot save file (without timestep) or if pressure or velocity is plotted
-PLOT_SAVE_NAME = "ReTest_Re=1e4"
+PLOT_SAVE_NAME = "50x100_Re=1e3"
 # save the plots?
-PLOT_SAVE = False
+PLOT_SAVE = True
 
 # say what was done
 print("\tAnimate " + ANIMATE_WHAT + "\n \
