@@ -124,7 +124,7 @@ void SOR::calculateRes(const matrix_t &new_field, const matrix_t &RHS)
 {
     // remember we don't want the ghost cells
     for (index_t i = 1; i < res_.size() - 1; i++) {
-        for (index_t j = 1; j < res_.size() - 1; j++) {
+        for (index_t j = 1; j < res_[i].size() - 1; j++) {
             // p_(i+1)_j - 2p_i_j + p_(i-1)_j
             double temp_x = new_field[i+1][j] - 2*new_field[i][j] + new_field[i-1][j];
             // p_i_(j+1) - 2p_i_j + p_i_(j-1)
