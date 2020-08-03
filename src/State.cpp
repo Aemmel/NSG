@@ -8,7 +8,7 @@
 
 using std::vector;
 
-State::State(index_t width, index_t height, double dx, double dy, double t)
+State::State(index_t width, index_t height, double dx, double dy, double t, double p_init)
 {
     width_ = width;
     height_ = height;
@@ -24,7 +24,7 @@ State::State(index_t width, index_t height, double dx, double dy, double t)
     // though we ALWAYS have to remember, that we have width_ rows and height_ columns!!!!!
     u = matrix_t(width_, vector<double>(height_, 0));
     v = matrix_t(width_, vector<double>(height_, 0));
-    p = matrix_t(width_, vector<double>(height_, 0));
+    p = matrix_t(width_, vector<double>(height_, p_init));
 }
 
 index_t State::getCellCountX() const 
@@ -89,9 +89,9 @@ void State::fillWithFunction(GRID grid, const std::function<double(double, doubl
 }
 
 State::State(const Options &options, double t) :
- State(options.getCellCntX(), options.getCellCntY(), options.getDx(), options.getDy(), t)
+ State(options.getCellCntX(), options.getCellCntY(), options.getDx(), options.getDy(), t, options.getInitialValue())
 {
-    
+
 }
 
 
