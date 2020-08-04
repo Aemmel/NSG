@@ -9,9 +9,14 @@ import json
 from os import listdir
 from os.path import isfile, join
 import re
+import sys
 
 # configure pyplot
+<<<<<<< Updated upstream
 #plt.rc("text", usetex=False)
+=======
+#plt.rc("text", usetex=True)
+>>>>>>> Stashed changes
 plt.rc("font", family="serif")
 # rcParams["animation.convert_path"] = r"C:/Program Files/ImageMagick-7.0.8-Q16/magick.exe"
 
@@ -93,7 +98,7 @@ def animate_both(i):
 # variables to control what to plot
 
 # options are "none", "p", "v", "pv"
-ANIMATE_WHAT = "pv"
+ANIMATE_WHAT = "none"
 # slow down factor for animation (1 would be print_every from options.json)
 ANIMATE_SLOW_FACTOR = 60
 # title of MP4, if p, v or pv is added is done automatically
@@ -101,14 +106,14 @@ ANIMATE_TITLE = "100x50_2Raender_Re=1e3"
 
 # plot velocity. Array of time values to plot (it takes the closest values)
 # if it's -1, then don't plot
-PLOT_FLUID = [ 0.025, 1.0, 3.0, 10.0, 18.0 ]
+PLOT_FLUID = [ 1, 22.6 , 26.30 ]
 # plot velocity or pressure or both for each PLOT_FLUID
 PLOT_VELOCITY = True
 PLOT_PRESSURE = True
 # "streamplot (and/or) heat map: PLOT_TITLE, t=..."
-PLOT_TITLE = "2 Ränder (100x50)"
+PLOT_TITLE = r"$Re=10^4$"
 # plot save file (without timestep) or if pressure or velocity is plotted
-PLOT_SAVE_NAME = "100x50_2Raender_Re=1e3"
+PLOT_SAVE_NAME = "SmallDx_ReTest_Re=1e4"
 # save the plots?
 PLOT_SAVE = True
 
@@ -138,17 +143,19 @@ if ANIMATE_WHAT != "none":
     ax = fig.add_subplot(111)
     im = plt.imshow(np.array(pd.read_csv(file_names_p[0], delimiter="\t", header=None)), animated=True, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="Greens")
 
-    fps = obj["print_every"]*1000 * ANIMATE_SLOW_FACTOR # stored in s, convert to ms and slow down
+    fps = obj["print_every"]*1000 * ANIMATE_SLOW_FACTOR # stored in s, convert to ms and slow down. Also not really FPS, it's interval between frames.. so 1/fp(ms)
 
     fig.colorbar(im)
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
 
-    ani = animation.FuncAnimation(fig, animation_func, np.arange(0, len(file_names_u)), interval=fps)
-    ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
+    writer = animation.FFMpegFileWriter(fps=int(1./(fps/1000.)))
+    ani = animation.FuncAnimation(fig, animation_func, np.arange(0, len(file_names_u)), interval=fps, save_count=sys.maxsize)
+    #ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
+    ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer=writer)
 
 if len(PLOT_FLUID) > 0 and max(PLOT_FLUID) > max(time_steps):
-    print("ERROR: PLOT_FLUI can't contain values larger than " + str(max(time_steps)))
+    print("ERROR: PLOT_FLUID can't contain values larger than " + str(max(time_steps)))
     exit()
 
 for t in PLOT_FLUID:
@@ -170,7 +177,7 @@ for t in PLOT_FLUID:
         ax.streamplot(X_mesh, Y_mesh, data_u, data_v, density=1.5, color="blue")
     if PLOT_PRESSURE == True:
         im = ax.imshow(data_p, extent=(0, obj["cell_cnt_x"]*obj["dx"], 0, obj["cell_cnt_y"]*obj["dy"]), cmap="Greens")
-        fig.colorbar(im)
+        fig.colorbar(im, fraction=0.15)
 
     ax.set_xlabel("X")
     ax.set_ylabel("Y")

@@ -117,7 +117,7 @@ State TimeStepper::step(const State& curr_step)
 
     double dt = calculateDt(u_max, v_max);
 
-    if (dt < 1e-4) {
+    if (dt < 1e-5) {
         std::cout << "Very small dt, we have u_max=" << u_max << " and v_max=" << v_max << std::endl;
     }
 
