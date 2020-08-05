@@ -21,8 +21,8 @@ public:
 
 
     void applyPBoundaries(matrix_t &p) const override;
-    void applyUBoundaries(matrix_t &u) const override ;
-    void applyVBoundaries(matrix_t &v) const override ;
+    void applyUBoundaries(matrix_t &u, double t) const override ;
+    void applyVBoundaries(matrix_t &v, double t) const override ;
 
 };
 

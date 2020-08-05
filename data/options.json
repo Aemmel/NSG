@@ -1,9 +1,9 @@
 {
     "cell_cnt_x": 100,
-    "cell_cnt_y": 50,
+    "cell_cnt_y": 100,
     "dx": 0.01,
     "dy": 0.01,
-    "reynold": 500,
+    "reynold": 1000,
     "rel_epsilon": 1e-5,
     "max_time": 20,
     "force_x": 0,

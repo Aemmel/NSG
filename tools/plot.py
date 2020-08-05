@@ -12,11 +12,6 @@ import re
 import sys
 
 # configure pyplot
-<<<<<<< Updated upstream
-#plt.rc("text", usetex=False)
-=======
-#plt.rc("text", usetex=True)
->>>>>>> Stashed changes
 plt.rc("font", family="serif")
 # rcParams["animation.convert_path"] = r"C:/Program Files/ImageMagick-7.0.8-Q16/magick.exe"
 
@@ -98,22 +93,22 @@ def animate_both(i):
 # variables to control what to plot
 
 # options are "none", "p", "v", "pv"
-ANIMATE_WHAT = "none"
+ANIMATE_WHAT = "pv"
 # slow down factor for animation (1 would be print_every from options.json)
-ANIMATE_SLOW_FACTOR = 60
+ANIMATE_SLOW_FACTOR = 1
 # title of MP4, if p, v or pv is added is done automatically
-ANIMATE_TITLE = "100x50_2Raender_Re=1e3"
+ANIMATE_TITLE = "Per_Randbed_Re=1e3"
 
 # plot velocity. Array of time values to plot (it takes the closest values)
 # if it's -1, then don't plot
-PLOT_FLUID = [ 1, 22.6 , 26.30 ]
+PLOT_FLUID = [ 0, 1, 5, 10, 18 ]
 # plot velocity or pressure or both for each PLOT_FLUID
 PLOT_VELOCITY = True
 PLOT_PRESSURE = True
 # "streamplot (and/or) heat map: PLOT_TITLE, t=..."
-PLOT_TITLE = r"$Re=10^4$"
+PLOT_TITLE = r"Periodische Randbedingungen"
 # plot save file (without timestep) or if pressure or velocity is plotted
-PLOT_SAVE_NAME = "SmallDx_ReTest_Re=1e4"
+PLOT_SAVE_NAME = "Per_Randbed_Re=1e3"
 # save the plots?
 PLOT_SAVE = True
 
@@ -151,8 +146,8 @@ if ANIMATE_WHAT != "none":
 
     writer = animation.FFMpegFileWriter(fps=int(1./(fps/1000.)))
     ani = animation.FuncAnimation(fig, animation_func, np.arange(0, len(file_names_u)), interval=fps, save_count=sys.maxsize)
-    #ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
-    ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer=writer)
+    ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer="imagemagick")
+    #ani.save("plots/" + ANIMATE_TITLE + ".mp4", writer=writer)
 
 if len(PLOT_FLUID) > 0 and max(PLOT_FLUID) > max(time_steps):
     print("ERROR: PLOT_FLUID can't contain values larger than " + str(max(time_steps)))

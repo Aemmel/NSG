@@ -48,7 +48,7 @@ void CavityFlowBoundaryCondition::applyPBoundaries(matrix_t &p) const {
     }
 }
 
-void CavityFlowBoundaryCondition::applyUBoundaries(matrix_t &u) const {
+void CavityFlowBoundaryCondition::applyUBoundaries(matrix_t &u, double t) const {
     auto width = u.size();
     auto height = u[0].size();
 
@@ -69,9 +69,16 @@ void CavityFlowBoundaryCondition::applyUBoundaries(matrix_t &u) const {
     //Set no slip condition for u
     //We have to iterate until u.size() - 1 because last index is a ghost cell
     for (index_t i = 1; i < width - 1; i++) {
-        u[i][1] = - velocity_;
+        //u[i][1] = - velocity_;
         u[i][0] = - u[i][1];
+
         u[i][height - 1] = velocity_;
+
+        //const double freq = 5;
+
+        //Periodic boundary condition
+        //u[i][height - 1] = velocity_ * cos(2 * M_PI * t / freq);
+
         u[i][height - 2] = u[i][height - 1];
     }
 
@@ -81,7 +88,7 @@ void CavityFlowBoundaryCondition::applyUBoundaries(matrix_t &u) const {
     }
 }
 
-void CavityFlowBoundaryCondition::applyVBoundaries(matrix_t &v) const {
+void CavityFlowBoundaryCondition::applyVBoundaries(matrix_t &v, double t) const {
     auto width = v.size();
     auto height = v[0].size();
 

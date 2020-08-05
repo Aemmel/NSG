@@ -195,6 +195,6 @@ void TimeStepper::calculateUV(State &next_step, const matrix_t &F, const matrix_
     }
 
     // apply boundaries
-    boundary_.applyUBoundaries(next_step.u);
-    boundary_.applyVBoundaries(next_step.v);
+    boundary_.applyUBoundaries(next_step.u, next_step.getTime());
+    boundary_.applyVBoundaries(next_step.v, next_step.getTime());
 }
