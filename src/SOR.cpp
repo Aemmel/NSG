@@ -53,11 +53,11 @@ matrix_t SOR::newField(const matrix_t &RHS, double omega, index_t max_it)
     } while(!resBelowError(res_) && cnt < max_it);
 
     // inform not only how long it took, but also if it converged quickly enough
-    std::cout << "SOR Solver took " << cnt << " iterations";
+    // std::cout << "SOR Solver took " << cnt << " iterations";
     if (cnt == max_it) {
-        std::cout << ". Maximum was reached";
+        std::cout << "SOR reached maximum!" << std::endl;
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
     return curr_field_;
 }

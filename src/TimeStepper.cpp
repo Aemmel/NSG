@@ -157,9 +157,8 @@ TimeStepper::TimeStepper(const AbstractBoundaryCondition &boundary, const Option
 
     Re_ = options.getReynold();
 
-    //TODO: Implement gravity.
-    gx_ = 0;
-    gy_ = 0;
+    gx_ = options.getForceX();
+    gy_ = options.getForceY();
 
     rel_eps_ = options.getRelEps();
 

@@ -43,14 +43,9 @@ int main()
             state = t_step.step(state);
             std::cout << "Current Time: " << state.getTime() << std::endl;
 
-            // if (int(10*last_time) != int(10*state.getTime())) {
-            //     printer.print(state, state.getTime());
-            //     std::cout << "PRINTED" << std::endl;
-            // }
-
             if (elapsed_since_print >= print_every) {
                 printer.print(state, state.getTime());
-                std::cout << "PRINTED" << std::endl;
+                std::cout << "PRINTED at t=" << state.getTime() << std::endl;
                 elapsed_since_print = 0;
             }
             else {
